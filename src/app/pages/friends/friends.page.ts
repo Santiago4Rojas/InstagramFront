@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButton, IonButtons, IonBackButton } from '@ionic/angular/standalone';
-import { NgFor } from '@angular/common';
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonList, IonItem, IonLabel, IonButton, IonButtons, IonBackButton
+} from '@ionic/angular/standalone';
 import { Api } from '../../services/api';
 
 @Component({
@@ -10,7 +10,10 @@ import { Api } from '../../services/api';
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonButtons, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, NgFor, IonBackButton]
+  imports: [
+    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonList, IonItem, IonLabel, IonButton, IonButtons, IonBackButton
+  ]
 })
 export class FriendsPage implements OnInit {
 
@@ -19,17 +22,15 @@ export class FriendsPage implements OnInit {
 
   constructor(private api: Api) {}
 
-  ngOnInit() {
-    this.load();
-  }
+  ngOnInit() { this.load(); }
 
   load() {
-    this.api.getFriends().subscribe(res => this.friends = res);
-    this.api.getPendingFriendRequests().subscribe(res => this.pending = res);
+    this.api.getFriends().subscribe(res => this.friends = res.data ?? res);
+    this.api.getPendingFriendRequests().subscribe(res => this.pending = res.data ?? res);
   }
 
   accept(req: any) {
-    this.api.acceptFriendship(req.id).subscribe(_ => this.load());
+    this.api.acceptFriendship(req.id).subscribe(() => this.load());
   }
 
 }

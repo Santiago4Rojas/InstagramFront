@@ -1,21 +1,35 @@
 <ion-header><ion-toolbar><ion-title>Mini Instagram</ion-title></ion-toolbar></ion-header>
 <ion-content class="ion-padding">
-  <ion-segment [(ngModel)]="isRegister">
-    <ion-segment-button [value]="false"><ion-label>Ingresar</ion-label></ion-segment-button>
-    <ion-segment-button [value]="true"><ion-label>Registrar</ion-label></ion-segment-button>
+
+  <ion-segment [(ngModel)]="mode">
+    <ion-segment-button value="login"><ion-label>Ingresar</ion-label></ion-segment-button>
+    <ion-segment-button value="register"><ion-label>Registrar</ion-label></ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="isRegister">
-    <ion-item><ion-input label="Nombre" [(ngModel)]="name"></ion-input></ion-item>
-    <ion-item><ion-input label="Usuario" [(ngModel)]="username"></ion-input></ion-item>
-  </div>
+  @if (isRegister) {
+    <ion-item>
+      <ion-input label="Nombre" labelPlacement="stacked" [(ngModel)]="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Usuario" labelPlacement="stacked" [(ngModel)]="username"></ion-input>
+    </ion-item>
+  }
 
-  <ion-item><ion-input label="Email" [(ngModel)]="email"></ion-input></ion-item>
-  <ion-item><ion-input label="Password" type="password" [(ngModel)]="password"></ion-input></ion-item>
+  <ion-item>
+    <ion-input label="Email" labelPlacement="stacked" type="email" [(ngModel)]="email"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Contraseña" labelPlacement="stacked" type="password" [(ngModel)]="password"></ion-input>
+  </ion-item>
 
-  <ion-button expand="block" (click)="submit()">
+  <ion-button expand="block" class="ion-margin-top" (click)="submit()">
     {{ isRegister ? 'Crear cuenta' : 'Entrar' }}
   </ion-button>
 
-  <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+  @if (error) {
+    <ion-text color="danger">
+      <p>{{ error }}</p>
+    </ion-text>
+  }
+
 </ion-content>

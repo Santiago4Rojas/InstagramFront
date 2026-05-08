@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Auth } from './auth';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Auth } from './auth';
 })
 export class Api {
 
-  private apiUrl = 'http://20.20.1.145/api/';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private auth: Auth) {}
 
@@ -29,6 +30,10 @@ export class Api {
 
   likePost(id: number) {
     return this.http.post(this.apiUrl + `posts/${id}/like`, {}, this.authHeaders());
+  }
+
+  unlikePost(id: number) {
+    return this.http.delete(this.apiUrl + `posts/${id}/like`, this.authHeaders());
   }
 
   createPost(file: File, caption: string) {
@@ -63,6 +68,14 @@ export class Api {
 
   acceptFriendship(friendshipId: number) {
     return this.http.post(this.apiUrl + `friendships/${friendshipId}/accept`, {}, this.authHeaders());
+  }
+
+searchUsers(username: string) {
+  return this.http.get<any[]>(this.apiUrl + 'users/search?username=' + username, this.authHeaders());
+  }
+
+sendFriendByUsername(username: string) {
+  return this.http.post(this.apiUrl + 'users/username/' + username + '/friend', {}, this.authHeaders());
   }
 
 }

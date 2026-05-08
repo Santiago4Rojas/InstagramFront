@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonImg, IonButtons, IonBackButton, IonIcon, IonCol, IonGrid, IonRow } from '@ionic/angular/standalone';
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonItem, IonInput, IonButton, IonImg,
+  IonButtons, IonBackButton, IonIcon,
+  IonGrid, IonRow, IonCol
+} from '@ionic/angular/standalone';
 import { Api } from '../../services/api';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-
 import { addIcons } from 'ionicons';
 import { camera, fileTray, cloudUpload } from 'ionicons/icons';
 
@@ -14,49 +18,52 @@ import { camera, fileTray, cloudUpload } from 'ionicons/icons';
   templateUrl: './new-post.page.html',
   styleUrls: ['./new-post.page.scss'],
   standalone: true,
-  imports: [IonRow, 
-    IonGrid, IonCol, IonIcon, IonBackButton, IonImg, IonHeader, 
-    IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, FormsModule, IonButtons, CommonModule,
-    IonGrid, IonCol
+  imports: [
+    IonGrid, IonRow, IonCol, IonIcon,
+    IonBackButton, IonImg, IonHeader, IonToolbar, IonTitle,
+    IonContent, IonItem, IonInput, IonButton, IonButtons,
+    FormsModule, CommonModule
   ]
 })
-export class NewPostPage implements OnInit {
+export class NewPostPage {
 
   caption = '';
   file?: File;
   preview?: string;
 
   constructor(private api: Api, private router: Router) {
-    addIcons({camera,fileTray,cloudUpload,});
+    addIcons({ camera, fileTray, cloudUpload });
   }
-  
-  ngOnInit() {}
 
   onFileChange(ev: any) {
-    const f = ev.target.files[0];
-    if (f) this.file = f;
+    const f: File = ev.target.files[0];
+    if (!f) return;
+    this.file = f;
     this.preview = URL.createObjectURL(f);
+  }
+
+  async takePhoto() {
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 80,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Camera
+      });
+      this.preview = photo.dataUrl || undefined;
+      if (photo.dataUrl) {
+        this.file = this.dataUrlToFile(photo.dataUrl, 'photo.jpg');
+      }
+    } catch (err) {
+      console.warn('Cámara cancelada o sin permiso', err);
+    }
   }
 
   upload() {
     if (!this.file) return;
-    this.api.createPost(this.file, this.caption).subscribe(() => {
-      this.router.navigateByUrl('/feed');
+    this.api.createPost(this.file, this.caption).subscribe({
+      next: () => this.router.navigateByUrl('/feed'),
+      error: (err) => console.error('Error al publicar', err)
     });
-  }
-
-  async takePhoto() {
-    const photo = await Camera.getPhoto({
-      quality: 80,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
-    });
-
-    this.preview = photo.dataUrl || undefined;
-    // convertir a File
-    if (photo.dataUrl) {
-      this.file = this.dataUrlToFile(photo.dataUrl, 'photo.jpg');
-    }
   }
 
   private dataUrlToFile(dataUrl: string, filename: string): File {

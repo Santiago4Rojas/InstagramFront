@@ -2,15 +2,15 @@
   <ion-toolbar>
     <ion-title>Feed</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="goNewPost()">
+      <ion-button (click)="goNewPost()" title="Nueva publicación">
         <ion-icon name="camera-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="goFriends()">
+      <ion-button (click)="goFriends()" title="Amigos">
         <ion-icon name="person-add"></ion-icon>
       </ion-button>
-      <ion-button (click)="logout()">
+      <ion-button (click)="logout()" title="Cerrar sesión">
         <ion-icon name="exit-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -19,61 +19,93 @@
 
 <ion-content>
 
-  <!-- enviar solicitud de amistad rápida -->
+  <!-- Enviar solicitud de amistad -->
   <ion-item>
-    <ion-input placeholder="ID usuario" type="number" [(ngModel)]="friendId"></ion-input>
-    <ion-button (click)="addFriend()">Agregar</ion-button>
+    <ion-input placeholder="ID de usuario" type="number" [(ngModel)]="friendId"></ion-input>
+    <ion-button slot="end" (click)="addFriend()">Agregar</ion-button>
   </ion-item>
 
-  <!-- posts -->
-  <ion-list *ngFor="let p of posts">
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img src="https://placehold.co/64x64" />
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ p.user?.profile?.username || p.user?.name }}</h2>
-        <p>{{ p.caption }}</p>
-      </ion-label>
-    </ion-item>
+  <!-- Lista de posts -->
+  @for (p of posts; track p.id) {
+    <ion-list>
+      <!-- Cabecera del post: avatar + usuario -->
+      <ion-item lines="none">
+        <ion-label>
+          <h2>{{ p.user?.profile?.username || p.user?.name }}</h2>
+        </ion-label>
+      </ion-item>
 
-    <img [src]="imgUrl(p.image)" style="width:100%;max-height:280px;object-fit:cover;" />
+      <!-- Imagen del post -->
+      @if (p.image) {
+        <ion-item lines="none" class="ion-no-padding">
+          <img [src]="imgUrl(p.image)" style="width:100%;max-height:400px;object-fit:cover;" />
+        </ion-item>
+      }
 
-    <ion-item>
-      <ion-button fill="clear" (click)="like(p)">
-        ❤️ Like ({{ p.likes?.length || 0 }})
-      </ion-button>
-      <ion-button fill="clear" (click)="openComments(p)">
-        💬
-      </ion-button>
-    </ion-item>
-  </ion-list>
-
-  <!-- panel de comentarios -->
-  <div *ngIf="showComments"
-       style="position:fixed;bottom:0;left:0;right:0;top:25%;background:white;z-index:1000;box-shadow:0 -4px 12px rgba(0,0,0,.15);">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Comentarios</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeComments()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-list>
-        <ion-item *ngFor="let c of comments">
-          <ion-label>
-            <strong>{{ c.user?.profile?.username || c.user?.name }}</strong><br />
-            {{ c.content }}
+      <!-- Caption -->
+      @if (p.caption) {
+        <ion-item lines="none">
+          <ion-label class="ion-text-wrap">
+            <span><strong>{{ p.user?.profile?.username || p.user?.name }}</strong> {{ p.caption }}</span>
           </ion-label>
         </ion-item>
-      </ion-list>
+      }
+
+      <!-- Acciones: Like y Comentarios -->
+      <ion-item lines="full">
+        <ion-button fill="clear" (click)="toggleLike(p)">
+          @if (isLikedByMe(p)) {
+            <ion-icon name="heart" color="danger"></ion-icon>
+          } @else {
+            <ion-icon name="heart-outline"></ion-icon>
+          }
+          &nbsp;{{ p.likes?.length || 0 }}
+        </ion-button>
+        <ion-button fill="clear" (click)="openComments(p)">
+          <ion-icon name="chatbubble-outline"></ion-icon>
+          &nbsp;{{ p.comments_count || p.comments?.length || 0 }}
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  }
+
+  <!-- Panel de comentarios -->
+  @if (showComments) {
+    <div style="position:fixed;bottom:0;left:0;right:0;top:30%;background:white;z-index:1000;box-shadow:0 -4px 16px rgba(0,0,0,.2);display:flex;flex-direction:column;">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Comentarios</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeComments()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <!-- Lista de comentarios con scroll nativo -->
+      <div style="flex:1;overflow-y:auto;padding:8px 0;">
+        <ion-list>
+          @for (c of comments; track c.id) {
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">
+                <strong>{{ c.user?.profile?.username || c.user?.name }}</strong>
+                {{ c.content }}
+              </ion-label>
+            </ion-item>
+          }
+          @if (comments.length === 0) {
+            <ion-item lines="none">
+              <ion-label color="medium">Sin comentarios aún.</ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      </div>
+
+      <!-- Input para nuevo comentario -->
       <ion-item>
         <ion-input placeholder="Escribe un comentario..." [(ngModel)]="newComment"></ion-input>
-        <ion-button (click)="sendComment()">Enviar</ion-button>
+        <ion-button slot="end" (click)="sendComment()">Enviar</ion-button>
       </ion-item>
-    </ion-content>
-  </div>
+    </div>
+  }
 
 </ion-content>

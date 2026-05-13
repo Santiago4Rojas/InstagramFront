@@ -70,7 +70,40 @@ export class Api {
     return this.http.post(this.apiUrl + `friendships/${friendshipId}/accept`, {}, this.authHeaders());
   }
 
-searchUsers(username: string) {
+  getMe() {
+    return this.http.get<any>(this.apiUrl + 'me', this.authHeaders());
+  }
+
+  uploadAvatar(file: File) {
+    const fd = new FormData();
+    fd.append('avatar', file);
+    return this.http.post<any>(this.apiUrl + 'profile/avatar', fd, this.authHeaders());
+  }
+
+  getProfile(username: string) {
+    return this.http.get<any>(this.apiUrl + `profiles/${username}`, this.authHeaders());
+  }
+
+  updateProfile(data: { bio?: string; website?: string }) {
+    return this.http.put<any>(this.apiUrl + 'profile', data, this.authHeaders());
+  }
+
+  getStories() {
+    return this.http.get<any[]>(this.apiUrl + 'stories', this.authHeaders());
+  }
+
+  createStory(file: File, caption: string) {
+    const fd = new FormData();
+    fd.append('media', file);
+    if (caption) fd.append('caption', caption);
+    return this.http.post<any>(this.apiUrl + 'stories', fd, this.authHeaders());
+  }
+
+  deleteStory(id: number) {
+    return this.http.delete(this.apiUrl + `stories/${id}`, this.authHeaders());
+  }
+
+  searchUsers(username: string) {
   return this.http.get<any[]>(this.apiUrl + 'users/search?username=' + username, this.authHeaders());
   }
 

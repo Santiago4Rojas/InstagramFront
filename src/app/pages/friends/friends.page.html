@@ -7,33 +7,64 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding-bottom">
 
-  <!-- Buscar usuarios -->
+  <!-- Buscar y agregar usuarios -->
   <ion-list>
     <ion-item lines="full">
       <ion-label><strong>Buscar usuarios</strong></ion-label>
     </ion-item>
     <ion-item>
-      <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="search()" placeholder="Buscar por username"></ion-searchbar>
+      <ion-searchbar
+        [(ngModel)]="searchQuery"
+        (ionInput)="search()"
+        placeholder="Buscar por username"
+        debounce="300">
+      </ion-searchbar>
     </ion-item>
+
+    @if (feedbackMsg) {
+      <ion-item color="light" lines="none">
+        <ion-label color="primary">{{ feedbackMsg }}</ion-label>
+      </ion-item>
+    }
+
     @for (u of searchResults; track u.id) {
       <ion-item>
-        <ion-label>{{ u.username }} — {{ u.name }}</ion-label>
-        <ion-button slot="end" size="small" (click)="addFriend(u.username)">Agregar</ion-button>
+        <ion-label (click)="goProfile(u.username)" style="cursor:pointer;">
+          <h2>@{{ u.username }}</h2>
+          <p>{{ u.name }}</p>
+        </ion-label>
+        <ion-button slot="end" size="small" (click)="addFriend(u.username)">
+          Agregar
+        </ion-button>
+      </ion-item>
+    }
+    @if (searchQuery && searchResults.length === 0) {
+      <ion-item lines="none">
+        <ion-label color="medium">Sin resultados para "{{ searchQuery }}".</ion-label>
       </ion-item>
     }
   </ion-list>
 
-  <!-- Solicitudes pendientes -->
+  <!-- Solicitudes pendientes recibidas -->
   <ion-list>
     <ion-item lines="full">
       <ion-label><strong>Solicitudes pendientes</strong></ion-label>
+      @if (pending.length > 0) {
+        <ion-badge color="danger" slot="end">{{ pending.length }}</ion-badge>
+      }
     </ion-item>
+
     @for (r of pending; track r.id) {
       <ion-item>
-        <ion-label>{{ r.sender?.profile?.username || r.sender?.name || r.user?.profile?.username || r.user?.name }}</ion-label>
-        <ion-button slot="end" size="small" (click)="accept(r)">Aceptar</ion-button>
+        <ion-label (click)="goProfile(r.user?.profile?.username)" style="cursor:pointer;">
+          <h2>{{ r.user?.profile?.username || r.user?.name || '—' }}</h2>
+          <p>{{ r.user?.name }}</p>
+        </ion-label>
+        <ion-button slot="end" size="small" color="success" (click)="accept(r)">
+          Aceptar
+        </ion-button>
       </ion-item>
     }
     @if (pending.length === 0) {
@@ -46,11 +77,14 @@
   <!-- Amigos aceptados -->
   <ion-list>
     <ion-item lines="full">
-      <ion-label><strong>Mis amigos</strong></ion-label>
+      <ion-label><strong>Mis amigos ({{ friends.length }})</strong></ion-label>
     </ion-item>
     @for (f of friends; track f.id) {
-      <ion-item>
-        <ion-label>{{ f.profile?.username || f.name }}</ion-label>
+      <ion-item (click)="goProfile(f.profile?.username || f.username)" style="cursor:pointer;">
+        <ion-label>
+          <h2>@{{ f.profile?.username || f.username || f.name }}</h2>
+          <p>{{ f.name }}</p>
+        </ion-label>
       </ion-item>
     }
     @if (friends.length === 0) {

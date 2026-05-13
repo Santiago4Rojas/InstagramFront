@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
-  IonList, IonItem, IonLabel, IonButton, IonButtons, IonInput, IonIcon
+  IonList, IonItem, IonLabel, IonButton, IonButtons,
+  IonInput, IonIcon, IonRefresher, IonRefresherContent, IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cameraOutline, exitOutline, personAdd, heartOutline, heart, chatbubbleOutline } from 'ionicons/icons';
+import { cameraOutline, exitOutline, personAdd, heartOutline, heart, chatbubbleOutline, peopleOutline, bookOutline, personCircleOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { Auth } from '../../services/auth';
@@ -20,19 +21,22 @@ import { environment } from '../../../environments/environment';
   imports: [
     IonInput, IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonButton, IonButtons,
+    IonRefresher, IonRefresherContent, IonSpinner,
     FormsModule, CommonModule, IonIcon
   ]
 })
 export class FeedPage implements OnInit {
 
   posts: any[] = [];
+  stories: any[] = [];
   storageBase = environment.storageUrl;
+  myUsername  = '';
 
   selectedPost: any = null;
   newComment = '';
   comments: any[] = [];
   showComments = false;
-  friendId: number | null = null;
+  loading = false;
   currentUserId: number | null = null;
 
   constructor(
@@ -40,17 +44,46 @@ export class FeedPage implements OnInit {
     private router: Router,
     private auth: Auth,
   ) {
-    addIcons({ cameraOutline, personAdd, exitOutline, heartOutline, heart, chatbubbleOutline });
+    addIcons({ cameraOutline, personAdd, peopleOutline, bookOutline, personCircleOutline, exitOutline, heartOutline, heart, chatbubbleOutline });
   }
 
   ngOnInit() {
     const user = this.auth.getUser();
     this.currentUserId = user?.id ?? null;
+    // intentar obtener username del localStorage primero
+    this.myUsername = user?.profile?.username ?? user?.username ?? '';
+    // luego actualizar desde el backend (fuente de verdad)
+    this.api.getMe().subscribe({
+      next: me => {
+        this.myUsername = me?.profile?.username ?? '';
+        // actualizar localStorage con datos frescos
+        this.auth.setUser(me);
+      }
+    });
     this.load();
+    this.loadStories();
   }
 
-  load() {
-    this.api.getFeed().subscribe(res => this.posts = res.data ?? res);
+  loadStories() {
+    this.api.getStories().subscribe({
+      next: res => this.stories = res,
+      error: ()  => {}
+    });
+  }
+
+  load(event?: any) {
+    this.loading = true;
+    this.api.getFeed().subscribe({
+      next: res => {
+        this.posts = res.data ?? res;
+        this.loading = false;
+        if (event) event.target.complete();
+      },
+      error: () => {
+        this.loading = false;
+        if (event) event.target.complete();
+      }
+    });
   }
 
   isLikedByMe(post: any): boolean {
@@ -69,11 +102,17 @@ export class FeedPage implements OnInit {
   imgUrl(path: string) {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return this.storageBase + path;
+    const base = this.storageBase.endsWith('/') ? this.storageBase : this.storageBase + '/';
+    return base + path;
   }
 
-  goNewPost() { this.router.navigateByUrl('/new-post'); }
-  goFriends() { this.router.navigateByUrl('/friends'); }
+  goNewPost()    { this.router.navigateByUrl('/new-post'); }
+  goFriends()    { this.router.navigateByUrl('/friends'); }
+  goStories()    { this.router.navigateByUrl('/stories'); }
+  goProfile(username: string) { if (username) this.router.navigateByUrl('/profile/' + username); }
+  goMyProfile() {
+    if (this.myUsername) this.router.navigateByUrl('/profile/' + this.myUsername);
+  }
 
   openComments(post: any) {
     this.selectedPost = post;
@@ -94,14 +133,6 @@ export class FeedPage implements OnInit {
     this.selectedPost = null;
     this.comments = [];
     this.newComment = '';
-  }
-
-  addFriend() {
-    if (!this.friendId) return;
-    this.api.sendFriendRequest(this.friendId).subscribe({
-      next: () => { this.friendId = null; },
-      error: () => { this.friendId = null; }
-    });
   }
 
   logout() {

@@ -1,0 +1,334 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/feed"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ username }}</ion-title>
+    @if (friendshipStatus === 'own') {
+      <ion-buttons slot="end">
+        <ion-button (click)="openEdit()">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Input oculto para avatar -->
+  <input id="avatarInput" type="file" accept="image/*" hidden (change)="onAvatarFileChange($event)" />
+
+  @if (loading) {
+    <div style="display:flex;justify-content:center;padding:48px;">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
+
+  @if (!loading && data) {
+
+    <!-- ── Cabecera del perfil ── -->
+    <div style="padding:20px 16px 12px;">
+
+      <!-- Avatar + stats -->
+      <div style="display:flex;align-items:center;gap:24px;margin-bottom:16px;">
+
+        <!-- Avatar (clickeable) -->
+        <div (click)="onAvatarTap()"
+          style="position:relative;width:80px;height:80px;border-radius:50%;
+                 background:#eee;border:2px solid #ddd;overflow:hidden;
+                 flex-shrink:0;cursor:pointer;">
+
+          @if (uploadingAvatar) {
+            <div style="width:100%;height:100%;display:flex;align-items:center;
+                        justify-content:center;background:rgba(0,0,0,.4);">
+              <ion-spinner name="crescent" style="color:white;"></ion-spinner>
+            </div>
+          } @else if (avatarPreview) {
+            <img [src]="avatarPreview" style="width:100%;height:100%;object-fit:cover;" />
+          } @else if (data.profile?.avatar) {
+            <img [src]="mediaUrl(data.profile.avatar)"
+              style="width:100%;height:100%;object-fit:cover;" />
+          } @else {
+            <div style="width:100%;height:100%;display:flex;align-items:center;
+                        justify-content:center;font-size:36px;color:#aaa;">👤</div>
+          }
+
+          <!-- Ícono cámara si es propio -->
+          @if (friendshipStatus === 'own' && !uploadingAvatar) {
+            <div style="position:absolute;bottom:0;right:0;background:#e1306c;
+                        border-radius:50%;width:22px;height:22px;
+                        display:flex;align-items:center;justify-content:center;">
+              <ion-icon name="camera-outline"
+                style="font-size:12px;color:white;"></ion-icon>
+            </div>
+          }
+        </div>
+
+        <!-- Estadísticas -->
+        <div style="display:flex;flex:1;justify-content:space-around;text-align:center;">
+          <div>
+            <div style="font-size:18px;font-weight:700;">{{ data.posts_count }}</div>
+            <div style="font-size:12px;color:#666;">publicaciones</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:700;">{{ data.friends_count }}</div>
+            <div style="font-size:12px;color:#666;">amigos</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:700;">{{ data.stories_count ?? 0 }}</div>
+            <div style="font-size:12px;color:#666;">historias</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nombre y bio -->
+      <div style="margin-bottom:12px;">
+        <p style="font-weight:600;margin:0 0 4px;font-size:14px;">
+          {{ data.profile?.user?.name || username }}
+        </p>
+        @if (data.profile?.bio) {
+          <p style="margin:0 0 4px;font-size:13px;white-space:pre-wrap;">{{ data.profile.bio }}</p>
+        }
+        @if (data.profile?.website) {
+          <p style="margin:0;">
+            <ion-icon name="link-outline" style="vertical-align:middle;font-size:13px;"></ion-icon>
+            <a [href]="data.profile.website" target="_blank"
+              style="font-size:13px;color:#1a77f2;text-decoration:none;margin-left:4px;">
+              {{ data.profile.website }}
+            </a>
+          </p>
+        }
+      </div>
+
+      <!-- Botón de amistad / editar -->
+      <div style="display:flex;gap:8px;">
+        @if (friendshipStatus === 'own') {
+          <ion-button expand="block" fill="outline" size="small" style="flex:1;" (click)="openEdit()">
+            Editar perfil
+          </ion-button>
+        }
+        @if (friendshipStatus === 'none') {
+          <ion-button expand="block" size="small" style="flex:1;" (click)="sendRequest()">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Agregar amigo
+          </ion-button>
+        }
+        @if (friendshipStatus === 'pending_sent') {
+          <ion-button expand="block" fill="outline" size="small" style="flex:1;" disabled>
+            Solicitud enviada
+          </ion-button>
+        }
+        @if (friendshipStatus === 'pending_received') {
+          <ion-button expand="block" size="small" color="success" style="flex:1;" (click)="acceptRequest()">
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            Aceptar solicitud
+          </ion-button>
+        }
+        @if (friendshipStatus === 'friends') {
+          <ion-button expand="block" fill="outline" size="small" style="flex:1;" disabled>
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            Amigos
+          </ion-button>
+        }
+      </div>
+    </div>
+
+    <!-- Separador -->
+    <div style="height:1px;background:#eee;"></div>
+
+    <!-- ── Grid de publicaciones ── -->
+    @if (data.can_see_content) {
+      @if (data.posts?.length === 0) {
+        <div style="text-align:center;padding:48px 24px;color:#888;">
+          <ion-icon name="grid-outline" style="font-size:48px;display:block;margin-bottom:12px;"></ion-icon>
+          <p>Sin publicaciones aún.</p>
+        </div>
+      }
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+        @for (p of data.posts; track p.id) {
+          <div (click)="openPost(p)"
+            style="aspect-ratio:1;overflow:hidden;background:#eee;cursor:pointer;position:relative;">
+            <img [src]="mediaUrl(p.image)"
+              style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+            @if (p.likes?.length > 0 || p.comments?.length > 0) {
+              <div style="position:absolute;bottom:4px;left:4px;display:flex;gap:6px;">
+                @if (p.likes?.length > 0) {
+                  <span style="color:white;font-size:11px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.7);">
+                    ❤️ {{ p.likes.length }}
+                  </span>
+                }
+                @if (p.comments?.length > 0) {
+                  <span style="color:white;font-size:11px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.7);">
+                    💬 {{ p.comments.length }}
+                  </span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    } @else {
+      <div style="text-align:center;padding:56px 32px;color:#888;">
+        <ion-icon name="lock-closed-outline"
+          style="font-size:52px;display:block;margin-bottom:16px;color:#bbb;"></ion-icon>
+        <p style="font-weight:600;font-size:15px;margin:0 0 6px;">Cuenta privada</p>
+        <p style="font-size:13px;margin:0;">
+          Agrega a <strong>{{ username }}</strong> como amigo para ver sus publicaciones e historias.
+        </p>
+      </div>
+    }
+  }
+
+</ion-content>
+
+<!-- ── Modal opciones avatar ── -->
+@if (showAvatarOptions) {
+  <div (click)="showAvatarOptions=false"
+    style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8000;
+           display:flex;align-items:flex-end;">
+    <div (click)="$event.stopPropagation()"
+      style="background:white;width:100%;border-radius:20px 20px 0 0;
+             padding:8px 0 env(safe-area-inset-bottom,16px);">
+
+      <div style="width:40px;height:4px;background:#ddd;border-radius:2px;
+                  margin:8px auto 16px;"></div>
+
+      <!-- Ver foto de perfil (si tiene avatar) -->
+      @if (data?.profile?.avatar) {
+        <button (click)="viewAvatarFull()"
+          style="width:100%;background:none;border:none;padding:16px 20px;
+                 font-size:16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:14px;">
+          <ion-icon name="images-outline" style="font-size:22px;color:#333;"></ion-icon>
+          Ver foto de perfil
+        </button>
+      }
+
+      <!-- Ver historias -->
+      <button (click)="goToStoriesOf()"
+        style="width:100%;background:none;border:none;padding:16px 20px;
+               font-size:16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:14px;">
+        <ion-icon name="camera-outline" style="font-size:22px;color:#333;"></ion-icon>
+        Ver historias
+      </button>
+
+      <!-- Cambiar foto (solo propio) -->
+      @if (friendshipStatus === 'own') {
+        <div style="height:1px;background:#eee;margin:4px 0;"></div>
+        <button (click)="triggerAvatarInput()"
+          style="width:100%;background:none;border:none;padding:16px 20px;
+                 font-size:16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:14px;">
+          <ion-icon name="camera-outline" style="font-size:22px;color:#e1306c;"></ion-icon>
+          <span style="color:#e1306c;">Cambiar foto de perfil</span>
+        </button>
+      }
+
+      <div style="height:1px;background:#eee;margin:4px 0;"></div>
+      <button (click)="showAvatarOptions=false"
+        style="width:100%;background:none;border:none;padding:16px 20px;
+               font-size:16px;text-align:left;cursor:pointer;color:#666;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ── Ver foto de perfil completa ── -->
+@if (showAvatarFull) {
+  <div (click)="showAvatarFull=false"
+    style="position:fixed;inset:0;background:black;z-index:9000;
+           display:flex;align-items:center;justify-content:center;">
+    <button (click)="showAvatarFull=false"
+      style="position:absolute;top:env(safe-area-inset-top,16px);right:16px;
+             background:none;border:none;color:white;font-size:28px;cursor:pointer;">×</button>
+    <img [src]="mediaUrl(data?.profile?.avatar)"
+      style="width:100%;max-height:100vh;object-fit:contain;" />
+  </div>
+}
+
+<!-- ── Modal editar perfil ── -->
+@if (editMode) {
+  <div (click)="editMode=false"
+    style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8000;
+           display:flex;align-items:flex-end;">
+    <div (click)="$event.stopPropagation()"
+      style="background:white;width:100%;border-radius:20px 20px 0 0;padding:20px;
+             padding-bottom:env(safe-area-inset-bottom,20px);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0;font-size:16px;">Editar perfil</h3>
+        <button (click)="editMode=false"
+          style="background:none;border:none;font-size:22px;cursor:pointer;">×</button>
+      </div>
+      <ion-item style="--border-radius:10px;margin-bottom:10px;">
+        <ion-label position="stacked">Biografía</ion-label>
+        <ion-textarea [(ngModel)]="editBio" placeholder="Cuéntanos sobre ti..."
+          [rows]="3" maxlength="150"></ion-textarea>
+      </ion-item>
+      <ion-item style="--border-radius:10px;margin-bottom:16px;">
+        <ion-label position="stacked">Sitio web</ion-label>
+        <ion-input [(ngModel)]="editWebsite" placeholder="https://..." type="url"></ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="saveEdit()" [disabled]="saving">
+        @if (saving) { <ion-spinner name="crescent" slot="start"></ion-spinner>&nbsp; }
+        Guardar cambios
+      </ion-button>
+    </div>
+  </div>
+}
+
+<!-- ── Modal ver post ── -->
+@if (selectedPost) {
+  <div style="position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9000;
+              display:flex;flex-direction:column;
+              padding-top:env(safe-area-inset-top);
+              padding-bottom:env(safe-area-inset-bottom);">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:12px 16px;background:white;">
+      <span style="font-weight:600;">{{ selectedPost.user?.profile?.username }}</span>
+      <button (click)="closePost()"
+        style="background:none;border:none;font-size:24px;cursor:pointer;">×</button>
+    </div>
+
+    <img [src]="mediaUrl(selectedPost.image)"
+      style="width:100%;max-height:50vh;object-fit:contain;background:#000;" />
+
+    <div style="background:white;padding:8px 12px;display:flex;gap:12px;align-items:center;">
+      <button (click)="toggleLike(selectedPost)"
+        style="background:none;border:none;cursor:pointer;font-size:22px;">
+        {{ isLikedByMe(selectedPost) ? '❤️' : '🤍' }}
+      </button>
+      <span style="font-size:13px;font-weight:600;">{{ selectedPost.likes?.length || 0 }} me gusta</span>
+    </div>
+
+    @if (selectedPost.caption) {
+      <div style="background:white;padding:4px 12px 8px;">
+        <span style="font-size:13px;">
+          <strong>{{ selectedPost.user?.profile?.username }}</strong>
+          &nbsp;{{ selectedPost.caption }}
+        </span>
+      </div>
+    }
+
+    <div style="flex:1;overflow-y:auto;background:white;padding:8px 12px;">
+      @for (c of comments; track c.id) {
+        <div style="margin-bottom:8px;font-size:13px;">
+          <strong>{{ c.user?.profile?.username }}</strong>&nbsp;{{ c.content }}
+        </div>
+      }
+      @if (comments.length === 0) {
+        <p style="color:#aaa;font-size:13px;">Sin comentarios aún.</p>
+      }
+    </div>
+
+    <div style="background:white;display:flex;align-items:center;
+                padding:8px 12px;border-top:1px solid #eee;">
+      <input [(ngModel)]="newComment" placeholder="Agrega un comentario..."
+        style="flex:1;border:none;outline:none;font-size:13px;background:transparent;" />
+      <button (click)="sendComment()"
+        style="background:none;border:none;color:#1a77f2;font-weight:600;font-size:13px;cursor:pointer;">
+        Publicar
+      </button>
+    </div>
+  </div>
+}

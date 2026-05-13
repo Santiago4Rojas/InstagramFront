@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+.upload-section {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.story-bubbles {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

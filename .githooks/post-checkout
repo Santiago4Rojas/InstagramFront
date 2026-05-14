@@ -1,0 +1,9 @@
+#!/bin/sh
+# $3 == 1 significa cambio de rama (no checkout de archivo)
+if [ "$3" = "1" ]; then
+  changed=$(git diff-tree -r --name-only --no-commit-id "$1" "$2")
+  if echo "$changed" | grep -qE "package(-lock)?\.json"; then
+    echo "[hook] package.json actualizado — ejecutando npm install..."
+    npm install
+  fi
+fi

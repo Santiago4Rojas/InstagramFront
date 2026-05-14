@@ -1,0 +1,6 @@
+#!/bin/sh
+changed=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)
+if echo "$changed" | grep -qE "package(-lock)?\.json"; then
+  echo "[hook] package.json actualizado — ejecutando npm install..."
+  npm install
+fi

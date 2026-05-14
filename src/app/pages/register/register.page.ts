@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 
@@ -10,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonContent, FormsModule, CommonModule]
+  imports: [IonContent, IonIcon, FormsModule, CommonModule]
 })
 export class RegisterPage implements OnInit {
 
@@ -22,12 +24,12 @@ export class RegisterPage implements OnInit {
   error        = '';
   loading      = false;
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router) {
+    addIcons({ eyeOutline, eyeOffOutline });
+  }
 
-  // Fires on first load
   ngOnInit() { this.resetFields(); }
 
-  // Fires every time the page becomes active (handles Ionic component caching)
   ionViewWillEnter() { this.resetFields(); }
 
   private resetFields() {
@@ -42,9 +44,9 @@ export class RegisterPage implements OnInit {
 
   get canSubmit(): boolean {
     return (
-      this.mobile.trim().length > 0 &&
       this.name.trim().length > 0 &&
       this.username.trim().length > 0 &&
+      this.mobile.trim().length > 0 &&
       this.password.trim().length > 0 &&
       !this.loading
     );

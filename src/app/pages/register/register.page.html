@@ -1,36 +1,19 @@
 <ion-content [fullscreen]="true">
   <div class="register-wrap">
 
-    <!-- Logo -->
+    <!-- Logo — mismo que login, padding-top menor por los 4 campos -->
     <div class="logo-area">
       <span class="brand-font">Instagram</span>
     </div>
 
-    <!-- Headline -->
-    <div class="headline-area">
-      <p class="headline">Sign up to see photos and videos from your friends.</p>
-    </div>
-
-    <!-- Fields -->
+    <!-- Campos en el orden solicitado -->
     <div class="form-area">
 
       <div class="input-wrap">
         <input
-          class="light-input"
+          class="field-input"
           type="text"
-          placeholder="Mobile number or email"
-          [(ngModel)]="mobile"
-          autocomplete="email"
-          autocapitalize="none"
-          autocorrect="off"
-        />
-      </div>
-
-      <div class="input-wrap">
-        <input
-          class="light-input"
-          type="text"
-          placeholder="Full name"
+          placeholder="Nombre completo"
           [(ngModel)]="name"
           autocomplete="name"
         />
@@ -38,10 +21,22 @@
 
       <div class="input-wrap">
         <input
-          class="light-input"
+          class="field-input"
           type="text"
-          placeholder="Username"
+          placeholder="Usuario"
           [(ngModel)]="username"
+          autocapitalize="none"
+          autocorrect="off"
+        />
+      </div>
+
+      <div class="input-wrap">
+        <input
+          class="field-input"
+          type="text"
+          placeholder="Correo electrónico o número de teléfono"
+          [(ngModel)]="mobile"
+          autocomplete="email"
           autocapitalize="none"
           autocorrect="off"
         />
@@ -49,13 +44,13 @@
 
       <div class="input-wrap password-wrap">
         <input
-          class="light-input"
+          class="field-input"
           [type]="showPassword ? 'text' : 'password'"
-          placeholder="Password"
+          placeholder="Contraseña"
           [(ngModel)]="password"
         />
         <button class="show-hide-btn" type="button" (click)="showPassword = !showPassword">
-          {{ showPassword ? 'Hide' : 'Show' }}
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="eye-icon"></ion-icon>
         </button>
       </div>
 
@@ -72,27 +67,21 @@
         @if (loading) {
           <span class="spinner"></span>
         } @else {
-          Sign up
+          Crear cuenta
         }
       </button>
 
-      <p class="terms">
-        By signing up, you agree to our <span class="terms-link">Terms</span>,
-        <span class="terms-link">Privacy Policy</span> and
-        <span class="terms-link">Cookies Policy</span>.
-      </p>
-
     </div>
 
-    <!-- Spacer -->
+    <!-- Empuja el footer al fondo -->
     <div class="spacer"></div>
 
-    <!-- Log in section -->
-    <div class="login-section">
-      <div class="login-divider"></div>
-      <p class="login-row">
-        Have an account?
-        <span class="login-link" (click)="goLogin()">Log in</span>
+    <!-- Footer -->
+    <div class="footer-section">
+      <div class="footer-divider"></div>
+      <p class="footer-row">
+        ¿Ya tienes una cuenta?
+        <span class="footer-link" (click)="goLogin()">Inicia sesión</span>
       </p>
       <div class="meta-logo">
         <span class="meta-from">from</span>

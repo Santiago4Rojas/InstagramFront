@@ -2,7 +2,7 @@ ion-content {
   --background: #fafafa;
 }
 
-.login-wrap {
+.register-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,8 +16,8 @@ ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 72px;
-  margin-bottom: 32px;
+  padding-top: 52px;
+  margin-bottom: 16px;
 }
 
 .brand-font {
@@ -27,6 +27,21 @@ ion-content {
   color: #262626;
   letter-spacing: -1px;
   line-height: 1;
+}
+
+// ── Headline ────────────────────────────────────────────────
+.headline-area {
+  margin-bottom: 20px;
+  padding: 0 8px;
+}
+
+.headline {
+  color: #8e8e8e;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 }
 
 // ── Form ────────────────────────────────────────────────────
@@ -110,76 +125,51 @@ ion-content {
   background: #0084db;
 }
 
-.forgot-wrap {
-  text-align: center;
-  margin-top: 18px;
-}
-
-.forgot-link {
-  color: #385185;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-// ── OR divider ──────────────────────────────────────────────
-.divider {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin: 22px 0 0;
-  gap: 16px;
-}
-
-.divider-line {
-  flex: 1;
-  height: 1px;
-  background: #dbdbdb;
-}
-
-.divider-text {
+.terms {
   color: #8e8e8e;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.5;
+  margin: 16px 0 0;
+}
+
+.terms-link {
+  color: #262626;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 // ── Spacer ──────────────────────────────────────────────────
 .spacer {
   flex: 1;
-  min-height: 40px;
+  min-height: 32px;
 }
 
 // ── Bottom section ──────────────────────────────────────────
-.create-section {
+.login-section {
   width: calc(100% + 80px);
   margin-left: -40px;
   margin-right: -40px;
 }
 
-.create-divider {
+.login-divider {
   height: 1px;
   background: #dbdbdb;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
-.create-btn {
-  display: block;
-  width: calc(100% - 80px);
-  margin: 0 auto 28px;
-  background: transparent;
-  border: 1.5px solid #0095f6;
-  border-radius: 8px;
-  color: #0095f6;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 10px;
-  cursor: pointer;
+.login-row {
   text-align: center;
-  transition: opacity 0.15s;
+  font-size: 14px;
+  color: #262626;
+  margin: 0 0 24px;
 }
-.create-btn:active {
-  opacity: 0.7;
+
+.login-link {
+  color: #0095f6;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 4px;
 }
 
 .meta-logo {

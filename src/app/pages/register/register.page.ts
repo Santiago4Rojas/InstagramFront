@@ -6,24 +6,28 @@ import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
   standalone: true,
   imports: [IonContent, FormsModule, CommonModule]
 })
-export class LoginPage implements OnInit {
+export class RegisterPage implements OnInit {
 
-  email       = '';
-  password    = '';
+  mobile   = '';
+  name     = '';
+  username = '';
+  password = '';
   showPassword = false;
-  error       = '';
-  loading     = false;
+  error    = '';
+  loading  = false;
 
   constructor(private auth: Auth, private router: Router) {}
 
   ngOnInit() {
-    this.email        = '';
+    this.mobile       = '';
+    this.name         = '';
+    this.username     = '';
     this.password     = '';
     this.showPassword = false;
     this.error        = '';
@@ -31,27 +35,38 @@ export class LoginPage implements OnInit {
   }
 
   get canSubmit(): boolean {
-    return this.email.trim().length > 0 && this.password.trim().length > 0 && !this.loading;
+    return (
+      this.mobile.trim().length > 0 &&
+      this.name.trim().length > 0 &&
+      this.username.trim().length > 0 &&
+      this.password.trim().length > 0 &&
+      !this.loading
+    );
   }
 
   submit() {
     if (!this.canSubmit) return;
     this.error   = '';
     this.loading = true;
-    this.auth.login(this.email.trim(), this.password).subscribe({
+    this.auth.register({
+      name:     this.name.trim(),
+      email:    this.mobile.trim(),
+      password: this.password,
+      username: this.username.trim()
+    }).subscribe({
       next: res => {
         this.auth.setToken(res.token);
         this.auth.setUser(res.user);
         this.router.navigateByUrl('/tabs/feed', { replaceUrl: true });
       },
       error: () => {
-        this.error   = 'Credenciales inválidas. Intenta de nuevo.';
+        this.error   = 'No se pudo crear la cuenta. Verifica los datos.';
         this.loading = false;
       }
     });
   }
 
-  goRegister() {
-    this.router.navigateByUrl('/register');
+  goLogin() {
+    this.router.navigateByUrl('/login');
   }
 }

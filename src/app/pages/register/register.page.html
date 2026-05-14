@@ -1,9 +1,14 @@
 <ion-content [fullscreen]="true">
-  <div class="login-wrap">
+  <div class="register-wrap">
 
     <!-- Logo -->
     <div class="logo-area">
       <span class="brand-font">Instagram</span>
+    </div>
+
+    <!-- Headline -->
+    <div class="headline-area">
+      <p class="headline">Sign up to see photos and videos from your friends.</p>
     </div>
 
     <!-- Fields -->
@@ -13,9 +18,30 @@
         <input
           class="light-input"
           type="text"
-          placeholder="Phone number, username or email"
-          [(ngModel)]="email"
+          placeholder="Mobile number or email"
+          [(ngModel)]="mobile"
           autocomplete="email"
+          autocapitalize="none"
+          autocorrect="off"
+        />
+      </div>
+
+      <div class="input-wrap">
+        <input
+          class="light-input"
+          type="text"
+          placeholder="Full name"
+          [(ngModel)]="name"
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="input-wrap">
+        <input
+          class="light-input"
+          type="text"
+          placeholder="Username"
+          [(ngModel)]="username"
           autocapitalize="none"
           autocorrect="off"
         />
@@ -46,30 +72,28 @@
         @if (loading) {
           <span class="spinner"></span>
         } @else {
-          Log in
+          Sign up
         }
       </button>
 
-      <div class="forgot-wrap">
-        <span class="forgot-link">Forgot password?</span>
-      </div>
+      <p class="terms">
+        By signing up, you agree to our <span class="terms-link">Terms</span>,
+        <span class="terms-link">Privacy Policy</span> and
+        <span class="terms-link">Cookies Policy</span>.
+      </p>
 
     </div>
 
-    <!-- OR divider -->
-    <div class="divider">
-      <span class="divider-line"></span>
-      <span class="divider-text">OR</span>
-      <span class="divider-line"></span>
-    </div>
-
-    <!-- Push footer down -->
+    <!-- Spacer -->
     <div class="spacer"></div>
 
-    <!-- Create account + Meta -->
-    <div class="create-section">
-      <div class="create-divider"></div>
-      <button class="create-btn" (click)="goRegister()">Create new account</button>
+    <!-- Log in section -->
+    <div class="login-section">
+      <div class="login-divider"></div>
+      <p class="login-row">
+        Have an account?
+        <span class="login-link" (click)="goLogin()">Log in</span>
+      </p>
       <div class="meta-logo">
         <span class="meta-from">from</span>
         <span class="meta-brand">Meta</span>

@@ -14,17 +14,23 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
 
-  mobile   = '';
-  name     = '';
-  username = '';
-  password = '';
+  mobile       = '';
+  name         = '';
+  username     = '';
+  password     = '';
   showPassword = false;
-  error    = '';
-  loading  = false;
+  error        = '';
+  loading      = false;
 
   constructor(private auth: Auth, private router: Router) {}
 
-  ngOnInit() {
+  // Fires on first load
+  ngOnInit() { this.resetFields(); }
+
+  // Fires every time the page becomes active (handles Ionic component caching)
+  ionViewWillEnter() { this.resetFields(); }
+
+  private resetFields() {
     this.mobile       = '';
     this.name         = '';
     this.username     = '';

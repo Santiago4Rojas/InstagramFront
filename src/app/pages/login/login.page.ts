@@ -14,15 +14,21 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  email       = '';
-  password    = '';
+  email        = '';
+  password     = '';
   showPassword = false;
-  error       = '';
-  loading     = false;
+  error        = '';
+  loading      = false;
 
   constructor(private auth: Auth, private router: Router) {}
 
-  ngOnInit() {
+  // Fires on first load
+  ngOnInit() { this.resetFields(); }
+
+  // Fires every time the page becomes active (handles Ionic component caching)
+  ionViewWillEnter() { this.resetFields(); }
+
+  private resetFields() {
     this.email        = '';
     this.password     = '';
     this.showPassword = false;

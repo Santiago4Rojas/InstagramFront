@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonButton, IonButtons,
-  IonInput, IonIcon, IonRefresher, IonRefresherContent, IonSpinner
+  IonInput, IonIcon, IonRefresher, IonRefresherContent, IonSpinner,
+  IonInfiniteScroll, IonInfiniteScrollContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cameraOutline, exitOutline, personAdd, heartOutline, heart, chatbubbleOutline, peopleOutline, bookOutline, personCircleOutline } from 'ionicons/icons';
@@ -22,6 +23,7 @@ import { environment } from '../../../environments/environment';
     IonInput, IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonButton, IonButtons,
     IonRefresher, IonRefresherContent, IonSpinner,
+    IonInfiniteScroll, IonInfiniteScrollContent,
     FormsModule, CommonModule, IonIcon
   ]
 })
@@ -39,6 +41,9 @@ export class FeedPage implements OnInit {
   loading = false;
   currentUserId: number | null = null;
 
+  currentPage = 1;
+  allLoaded   = false;
+
   constructor(
     private api: Api,
     private router: Router,
@@ -50,13 +55,10 @@ export class FeedPage implements OnInit {
   ngOnInit() {
     const user = this.auth.getUser();
     this.currentUserId = user?.id ?? null;
-    // intentar obtener username del localStorage primero
     this.myUsername = user?.profile?.username ?? user?.username ?? '';
-    // luego actualizar desde el backend (fuente de verdad)
     this.api.getMe().subscribe({
       next: me => {
         this.myUsername = me?.profile?.username ?? '';
-        // actualizar localStorage con datos frescos
         this.auth.setUser(me);
       }
     });
@@ -72,17 +74,33 @@ export class FeedPage implements OnInit {
   }
 
   load(event?: any) {
-    this.loading = true;
-    this.api.getFeed().subscribe({
+    this.currentPage = 1;
+    this.allLoaded   = false;
+    this.loading     = true;
+    this.api.getFeed(1).subscribe({
       next: res => {
-        this.posts = res.data ?? res;
-        this.loading = false;
+        this.posts     = res.data ?? res;
+        this.allLoaded = !(res.next_page_url ?? res.meta?.next_cursor);
+        this.loading   = false;
         if (event) event.target.complete();
       },
       error: () => {
         this.loading = false;
         if (event) event.target.complete();
       }
+    });
+  }
+
+  loadMore(event: any) {
+    this.currentPage++;
+    this.api.getFeed(this.currentPage).subscribe({
+      next: res => {
+        this.posts     = [...this.posts, ...(res.data ?? res)];
+        this.allLoaded = !(res.next_page_url ?? res.meta?.next_cursor);
+        event.target.complete();
+        if (this.allLoaded) event.target.disabled = true;
+      },
+      error: () => { event.target.complete(); }
     });
   }
 

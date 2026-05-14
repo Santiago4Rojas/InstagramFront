@@ -20,8 +20,8 @@ export class Api {
     return { headers };
   }
 
-  getFeed() {
-    return this.http.get<any>(this.apiUrl + 'posts', this.authHeaders());
+  getFeed(page = 1) {
+    return this.http.get<any>(this.apiUrl + `posts?page=${page}`, this.authHeaders());
   }
 
   getFriends() {
@@ -56,10 +56,6 @@ export class Api {
       this.apiUrl + `posts/${postId}/comments`,
       this.authHeaders()
     );
-  }
-
-  sendFriendRequest(userId: number) {
-    return this.http.post(this.apiUrl + `users/${userId}/friend`, {}, this.authHeaders());
   }
 
   getPendingFriendRequests() {
@@ -104,11 +100,11 @@ export class Api {
   }
 
   searchUsers(username: string) {
-  return this.http.get<any[]>(this.apiUrl + 'users/search?username=' + username, this.authHeaders());
+    return this.http.get<any[]>(this.apiUrl + 'users/search?username=' + username, this.authHeaders());
   }
 
-sendFriendByUsername(username: string) {
-  return this.http.post(this.apiUrl + 'users/username/' + username + '/friend', {}, this.authHeaders());
+  sendFriendByUsername(username: string) {
+    return this.http.post(this.apiUrl + 'users/username/' + username + '/friend', {}, this.authHeaders());
   }
 
 }

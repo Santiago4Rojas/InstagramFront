@@ -118,6 +118,11 @@
     </ion-list>
   }
 
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="allLoaded">
+    <ion-infinite-scroll-content loadingText="Cargando más..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
   <!-- Panel de comentarios -->
   @if (showComments) {
     <div style="position:fixed;bottom:0;left:0;right:0;top:30%;background:white;z-index:1000;box-shadow:0 -4px 16px rgba(0,0,0,.2);display:flex;flex-direction:column;">

@@ -1,37 +1,189 @@
 /*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
+ * App Global CSS — Dark Instagram Theme
  */
 
-/* Core CSS required for Ionic components to work properly */
+/* Core CSS required for Ionic components */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+// Force dark always (no system preference dependency)
+@import "@ionic/angular/css/palettes/dark.always.css";
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+// ── Global resets ───────────────────────────────────────────
+* { box-sizing: border-box; }
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+// ── Ionic component overrides ───────────────────────────────
+ion-app { background: #000; }
+
+ion-content {
+  --background: #000000;
+  --color: #ffffff;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #000000;
+    --color: #ffffff;
+    --border-color: #3A3A3C;
+    --min-height: 44px;
+  }
+}
+
+ion-item {
+  --background: #000000;
+  --background-activated: #1C1C1E;
+  --color: #ffffff;
+  --border-color: #3A3A3C;
+  --inner-border-width: 0;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+ion-list { --background: #000000; background: #000; }
+
+ion-tab-bar {
+  --background: #000000;
+  --border-color: #3A3A3C;
+  border-top: 0.5px solid #3A3A3C;
+}
+
+ion-tab-button {
+  --color: #8E8E93;
+  --color-selected: #ffffff;
+  --background: #000000;
+}
+
+ion-searchbar {
+  --background: #1C1C1E;
+  --color: #ffffff;
+  --placeholder-color: #8E8E93;
+  --icon-color: #8E8E93;
+  --clear-button-color: #8E8E93;
+  --border-radius: 10px;
+}
+
+ion-input {
+  --background: transparent;
+  --color: #ffffff;
+  --placeholder-color: #8E8E93;
+}
+
+ion-textarea {
+  --background: transparent;
+  --color: #ffffff;
+  --placeholder-color: #8E8E93;
+}
+
+ion-segment {
+  --background: #1C1C1E;
+  ion-segment-button {
+    --background-checked: #3A3A3C;
+    --color: #8E8E93;
+    --color-checked: #ffffff;
+    --indicator-color: transparent;
+  }
+}
+
+ion-badge {
+  --background: #E1306C;
+  --color: #ffffff;
+}
+
+ion-spinner { --color: #ffffff; }
+
+ion-refresher { --background: #000; }
+
+ion-modal {
+  --background: #1C1C1E;
+  --border-radius: 16px;
+}
+
+ion-action-sheet {
+  --background: #1C1C1E;
+  --button-color: #ffffff;
+  --button-background: transparent;
+  --button-background-activated: #3A3A3C;
+}
+
+// ── Utility classes ─────────────────────────────────────────
+.text-primary   { color: #ffffff; }
+.text-secondary { color: #8E8E93; }
+.text-action    { color: #0095F6; }
+.text-danger    { color: #E1306C; }
+.bg-surface     { background: #1C1C1E; }
+.border-bottom  { border-bottom: 0.5px solid #3A3A3C; }
+
+.story-ring {
+  background: linear-gradient(45deg, #E1306C, #F77737, #FCAF45);
+  border-radius: 50%;
+  padding: 2.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  .story-ring-inner {
+    background: #000;
+    border-radius: 50%;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  background: #3A3A3C;
+}
+
+.btn-primary {
+  background: #0095F6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  &:active { opacity: 0.8; }
+}
+
+.btn-secondary {
+  background: #1C1C1E;
+  color: #fff;
+  border: 1px solid #3A3A3C;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  &:active { opacity: 0.8; }
+}
+
+.brand-font {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+// ── Scrollbar hide ──────────────────────────────────────────
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+
+// ── Animations ──────────────────────────────────────────────
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton,
-  IonButtons, IonBackButton, IonIcon, IonSpinner,
-  IonGrid, IonRow, IonCol, IonItem, IonInput, IonLabel, IonTextarea
+  IonButtons, IonBackButton, IonIcon, IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  gridOutline, lockClosedOutline, personAddOutline,
+  gridOutline, lockClosedOutline, personAddOutline, add,
   checkmarkCircleOutline, createOutline, linkOutline,
-  cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline
+  cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble
 } from 'ionicons/icons';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Api } from '../../services/api';
@@ -25,8 +24,7 @@ import { environment } from '../../../environments/environment';
   imports: [
     CommonModule, FormsModule,
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton,
-    IonButtons, IonBackButton, IonIcon, IonSpinner,
-    IonGrid, IonRow, IonCol, IonItem, IonInput, IonLabel, IonTextarea
+    IonButtons, IonBackButton, IonIcon, IonSpinner
   ]
 })
 export class ProfilePage implements OnInit {
@@ -62,9 +60,9 @@ export class ProfilePage implements OnInit {
     private api: Api,
     private auth: Auth
   ) {
-    addIcons({ gridOutline, lockClosedOutline, personAddOutline,
+    addIcons({ gridOutline, lockClosedOutline, personAddOutline, add,
                checkmarkCircleOutline, createOutline, linkOutline,
-               cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline });
+               cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble });
   }
 
   ngOnInit() {
@@ -116,7 +114,7 @@ export class ProfilePage implements OnInit {
   goToStoriesOf() {
     this.showAvatarOptions = false;
     // Navegar a historias del feed (en el futuro se puede filtrar por usuario)
-    this.router.navigateByUrl('/stories');
+    this.router.navigateByUrl('/tabs/stories');
   }
 
   // ── Subir avatar ─────────────────────────────────────
@@ -190,6 +188,6 @@ export class ProfilePage implements OnInit {
   }
 
   goToProfile(username: string) {
-    if (username) this.router.navigateByUrl('/profile/' + username);
+    if (username) this.router.navigateByUrl('/tabs/profile/' + username);
   }
 }

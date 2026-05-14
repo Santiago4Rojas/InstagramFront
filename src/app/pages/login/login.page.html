@@ -1,35 +1,70 @@
-<ion-header><ion-toolbar><ion-title>Mini Instagram</ion-title></ion-toolbar></ion-header>
-<ion-content class="ion-padding">
+<ion-content>
+  <div class="login-wrap">
 
-  <ion-segment [(ngModel)]="mode">
-    <ion-segment-button value="login"><ion-label>Ingresar</ion-label></ion-segment-button>
-    <ion-segment-button value="register"><ion-label>Registrar</ion-label></ion-segment-button>
-  </ion-segment>
+    <!-- Logo -->
+    <div class="logo-area">
+      <span class="brand-font">Instagram</span>
+    </div>
 
-  @if (isRegister) {
-    <ion-item>
-      <ion-input label="Nombre" labelPlacement="stacked" [(ngModel)]="name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input label="Usuario" labelPlacement="stacked" [(ngModel)]="username"></ion-input>
-    </ion-item>
-  }
+    <!-- Toggle tabs -->
+    <div class="tab-toggle">
+      <button class="tab-btn" [class.active]="!isRegister" (click)="mode='login'">Iniciar sesión</button>
+      <button class="tab-btn" [class.active]="isRegister"  (click)="mode='register'">Crear cuenta</button>
+    </div>
 
-  <ion-item>
-    <ion-input label="Email" labelPlacement="stacked" type="email" [(ngModel)]="email"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-input label="Contraseña" labelPlacement="stacked" type="password" [(ngModel)]="password"></ion-input>
-  </ion-item>
+    <!-- Form -->
+    <div class="form-area">
 
-  <ion-button expand="block" class="ion-margin-top" (click)="submit()">
-    {{ isRegister ? 'Crear cuenta' : 'Entrar' }}
-  </ion-button>
+      @if (isRegister) {
+        <div class="input-wrap">
+          <input class="dark-input" type="text" placeholder="Nombre completo" [(ngModel)]="name" />
+        </div>
+        <div class="input-wrap">
+          <input class="dark-input" type="text" placeholder="Usuario" [(ngModel)]="username" autocapitalize="none" />
+        </div>
+      }
 
-  @if (error) {
-    <ion-text color="danger">
-      <p>{{ error }}</p>
-    </ion-text>
-  }
+      <div class="input-wrap">
+        <input class="dark-input" type="email" placeholder="Correo electrónico" [(ngModel)]="email" autocomplete="email" />
+      </div>
 
+      <div class="input-wrap">
+        <input class="dark-input" type="password" placeholder="Contraseña" [(ngModel)]="password" />
+      </div>
+
+      @if (!isRegister) {
+        <div class="forgot-wrap">
+          <span class="forgot-link">¿Olvidaste tu contraseña?</span>
+        </div>
+      }
+
+      <button class="submit-btn" (click)="submit()">
+        {{ isRegister ? 'Crear cuenta' : 'Entrar' }}
+      </button>
+
+      @if (error) {
+        <p class="error-msg">{{ error }}</p>
+      }
+
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span class="divider-line"></span>
+      <span class="divider-text">O</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <!-- Footer link -->
+    <div class="footer-link">
+      @if (isRegister) {
+        <span class="text-secondary">¿Ya tienes una cuenta?</span>
+        <span class="text-action" (click)="mode='login'">&nbsp;Inicia sesión</span>
+      } @else {
+        <span class="text-secondary">¿No tienes una cuenta?</span>
+        <span class="text-action" (click)="mode='register'">&nbsp;Regístrate</span>
+      }
+    </div>
+
+  </div>
 </ion-content>

@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonItem, IonInput, IonButton, IonText,
-  IonSegment, IonSegmentButton, IonLabel
-} from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
@@ -14,10 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent,
-    IonItem, IonInput, IonButton, IonText,
-    IonSegment, IonSegmentButton, IonLabel,
-    FormsModule, CommonModule]
+  imports: [IonContent, FormsModule, CommonModule]
 })
 export class LoginPage {
 
@@ -44,7 +37,7 @@ export class LoginPage {
         next: res => {
           this.auth.setToken(res.token);
           this.auth.setUser(res.user);
-          this.router.navigateByUrl('/feed');
+          this.router.navigateByUrl('/tabs/feed');
         },
         error: () => this.error = 'No se pudo registrar. Verifica los datos.'
       });
@@ -53,7 +46,7 @@ export class LoginPage {
         next: res => {
           this.auth.setToken(res.token);
           this.auth.setUser(res.user);
-          this.router.navigateByUrl('/feed');
+          this.router.navigateByUrl('/tabs/feed');
         },
         error: () => this.error = 'Credenciales inválidas'
       });

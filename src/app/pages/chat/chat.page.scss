@@ -1,0 +1,145 @@
+.chat-header ion-toolbar {
+  --background: #000;
+  border-bottom: 0.5px solid #3A3A3C;
+}
+
+.chat-header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 4px;
+}
+
+.chat-header-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.chat-header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.chat-header-status {
+  font-size: 11px;
+  color: #8E8E93;
+}
+
+ion-content { --background: #000; }
+
+.messages-list {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100%;
+}
+
+.empty-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+}
+
+.empty-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+
+.msg-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+.msg-row.mine { align-items: flex-end; }
+
+.bubble {
+  background: #1C1C1E;
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 14px;
+  max-width: 75%;
+  font-size: 15px;
+  color: #fff;
+  line-height: 1.4;
+}
+.bubble-mine {
+  background: #0095F6;
+  border-radius: 18px 18px 4px 18px;
+}
+
+.msg-time {
+  font-size: 11px;
+  color: #8E8E93;
+  padding: 0 6px;
+}
+
+.chat-footer {
+  --background: #000;
+  border-top: 0.5px solid #3A3A3C;
+}
+
+.input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+
+.input-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  border-radius: 22px;
+  padding: 8px 14px;
+  gap: 6px;
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+.chat-input::placeholder { color: #8E8E93; }
+
+.send-btn {
+  background: transparent;
+  border: none;
+  color: #0095F6;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}

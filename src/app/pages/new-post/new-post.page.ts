@@ -3,15 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
-  IonItem, IonInput, IonButton, IonImg,
-  IonButtons, IonBackButton, IonIcon,
-  IonGrid, IonRow, IonCol
+  IonButton, IonButtons, IonBackButton, IonIcon,
 } from '@ionic/angular/standalone';
 import { Api } from '../../services/api';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
-import { camera, fileTray, cloudUpload } from 'ionicons/icons';
+import { camera, fileTray, cloudUpload, imageOutline, imagesOutline, cameraOutline, chevronForwardOutline, personOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-new-post',
@@ -19,9 +17,8 @@ import { camera, fileTray, cloudUpload } from 'ionicons/icons';
   styleUrls: ['./new-post.page.scss'],
   standalone: true,
   imports: [
-    IonGrid, IonRow, IonCol, IonIcon,
-    IonBackButton, IonImg, IonHeader, IonToolbar, IonTitle,
-    IonContent, IonItem, IonInput, IonButton, IonButtons,
+    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonButton, IonButtons, IonBackButton, IonIcon,
     FormsModule, CommonModule
   ]
 })
@@ -32,7 +29,7 @@ export class NewPostPage {
   preview?: string;
 
   constructor(private api: Api, private router: Router) {
-    addIcons({ camera, fileTray, cloudUpload });
+    addIcons({ camera, fileTray, cloudUpload, imageOutline, imagesOutline, cameraOutline, chevronForwardOutline, personOutline });
   }
 
   onFileChange(ev: any) {
@@ -61,7 +58,7 @@ export class NewPostPage {
   upload() {
     if (!this.file) return;
     this.api.createPost(this.file, this.caption).subscribe({
-      next: () => this.router.navigateByUrl('/feed'),
+      next: () => this.router.navigateByUrl('/tabs/feed'),
       error: (err) => console.error('Error al publicar', err)
     });
   }

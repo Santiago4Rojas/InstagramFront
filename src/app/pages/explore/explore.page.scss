@@ -1,0 +1,100 @@
+.explore-header ion-toolbar {
+  --background: #000;
+  border-bottom: 0.5px solid #3A3A3C;
+}
+
+.dark-searchbar {
+  --background: #1C1C1E;
+  --color: #fff;
+  --placeholder-color: #8E8E93;
+  --icon-color: #8E8E93;
+  --border-radius: 10px;
+  --box-shadow: none;
+  padding: 6px 8px;
+}
+
+ion-content { --background: #000; }
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 0.5px solid #1C1C1E;
+}
+.user-row:active { background: #1C1C1E; }
+
+.user-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 44px; height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-username {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.user-name {
+  font-size: 13px;
+  color: #8E8E93;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: #000;
+}
+
+.grid-cell {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #1C1C1E;
+  cursor: pointer;
+  position: relative;
+}
+.grid-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cell-overlay {
+  position: absolute;
+  bottom: 4px; left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

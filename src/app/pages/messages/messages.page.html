@@ -1,0 +1,87 @@
+<ion-header class="messages-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button style="color:#fff;">
+        <ion-icon name="chevron-forward-outline" style="transform:rotate(180deg);font-size:22px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title style="color:#fff;font-weight:700;">{{ myUsername }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button style="color:#fff;">
+        <ion-icon name="videocam-outline" style="font-size:24px;"></ion-icon>
+      </ion-button>
+      <ion-button style="color:#fff;">
+        <ion-icon name="add-outline" style="font-size:26px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  @if (loading) {
+    <div class="spinner-wrap">
+      <ion-spinner name="crescent" style="color:#fff;"></ion-spinner>
+    </div>
+  }
+
+  @if (!loading) {
+    <!-- Notes row -->
+    @if (friends.length > 0) {
+      <div class="notes-section">
+        <div class="notes-header">
+          <span class="section-label">Notas</span>
+          <ion-icon name="add-outline" style="font-size:20px;color:#fff;"></ion-icon>
+        </div>
+        <div class="notes-row">
+          @for (f of friends; track f.id) {
+            <div class="note-item">
+              <div class="note-avatar">
+                @if (f.profile?.avatar) {
+                  <img [src]="imgUrl(f.profile.avatar)" class="avatar-img" />
+                } @else {
+                  <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+                }
+              </div>
+              <span class="note-username">{{ f.profile?.username || f.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="row-divider"></div>
+    }
+
+    <!-- Messages section -->
+    <div class="messages-section">
+      <div class="messages-header-row">
+        <span class="section-label">Mensajes</span>
+      </div>
+      @for (f of friends; track f.id) {
+        <div class="chat-row" (click)="openChat(f)">
+          <div class="chat-avatar">
+            @if (f.profile?.avatar) {
+              <img [src]="imgUrl(f.profile.avatar)" class="avatar-img-md" />
+            } @else {
+              <ion-icon name="person-outline" style="font-size:20px;color:#8E8E93;"></ion-icon>
+            }
+          </div>
+          <div class="chat-info">
+            <span class="chat-name">{{ f.profile?.username || f.name }}</span>
+            <span class="chat-preview">Empieza una conversación</span>
+          </div>
+          <div class="chat-meta">
+            <ion-icon name="chevron-forward-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+          </div>
+        </div>
+      }
+      @if (friends.length === 0) {
+        <div class="empty-state">
+          <ion-icon name="person-outline" style="font-size:52px;color:#3A3A3C;"></ion-icon>
+          <p style="color:#8E8E93;margin-top:12px;">No tienes amigos aún</p>
+          <p style="color:#8E8E93;font-size:13px;">Agrega amigos para enviarles mensajes</p>
+        </div>
+      }
+    </div>
+  }
+
+</ion-content>

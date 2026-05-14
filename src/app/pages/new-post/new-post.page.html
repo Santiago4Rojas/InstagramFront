@@ -1,44 +1,56 @@
-<ion-header>
+<ion-header class="new-post-header">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/feed"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/feed" style="color:#fff;"></ion-back-button>
     </ion-buttons>
-    <ion-title>Nueva publicación</ion-title>
+    <ion-title style="color:#fff;font-weight:700;">Nueva publicación</ion-title>
+    @if (file) {
+      <ion-buttons slot="end">
+        <ion-button (click)="upload()" style="color:#0095F6;font-weight:700;">Compartir</ion-button>
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
 
-  <ion-item>
-    <ion-input label="Descripción" labelPlacement="stacked" [(ngModel)]="caption"></ion-input>
-  </ion-item>
+  <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
 
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" (click)="takePhoto()">
-          <ion-icon name="camera" slot="start"></ion-icon>
-          Cámara
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" (click)="fileInput.click()">
-          <ion-icon name="file-tray" slot="start"></ion-icon>
-          Archivo
-        </ion-button>
-        <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" [disabled]="!file" (click)="upload()">
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          Publicar
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Preview area -->
+  <div class="preview-area">
+    @if (preview) {
+      <img [src]="preview" class="main-preview" />
+    } @else {
+      <div class="preview-placeholder" (click)="fileInput.click()">
+        <ion-icon name="image-outline" style="font-size:48px;color:#3A3A3C;"></ion-icon>
+        <p style="color:#8E8E93;margin-top:12px;">Toca para seleccionar una foto</p>
+      </div>
+    }
+  </div>
 
-  @if (preview) {
-    <ion-img [src]="preview" style="margin-top:16px;border-radius:12px;"></ion-img>
-  }
+  <!-- Caption -->
+  <div class="caption-row">
+    <div class="caption-avatar">
+      <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+    </div>
+    <input class="caption-input" [(ngModel)]="caption" placeholder="Escribe una descripción..." />
+  </div>
+
+  <div class="row-divider"></div>
+
+  <!-- Action buttons -->
+  <div class="actions-section">
+    <button class="action-row" (click)="takePhoto()">
+      <ion-icon name="camera-outline" style="font-size:22px;color:#fff;margin-right:14px;"></ion-icon>
+      <span style="color:#fff;font-size:15px;">Tomar foto</span>
+      <ion-icon name="chevron-forward-outline" style="font-size:18px;color:#8E8E93;margin-left:auto;"></ion-icon>
+    </button>
+    <div class="row-divider"></div>
+    <button class="action-row" (click)="fileInput.click()">
+      <ion-icon name="images-outline" style="font-size:22px;color:#fff;margin-right:14px;"></ion-icon>
+      <span style="color:#fff;font-size:15px;">Elegir de galería</span>
+      <ion-icon name="chevron-forward-outline" style="font-size:18px;color:#8E8E93;margin-left:auto;"></ion-icon>
+    </button>
+  </div>
 
 </ion-content>

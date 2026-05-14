@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonList, IonItem, IonLabel, IonButton, IonButtons,
-  IonInput, IonIcon, IonRefresher, IonRefresherContent, IonSpinner,
+  IonHeader, IonToolbar, IonContent,
+  IonButton, IonButtons, IonIcon, IonRefresher, IonRefresherContent, IonSpinner,
   IonInfiniteScroll, IonInfiniteScrollContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cameraOutline, exitOutline, personAdd, heartOutline, heart, chatbubbleOutline, peopleOutline, bookOutline, personCircleOutline } from 'ionicons/icons';
+import {
+  cameraOutline, personOutline, add, heartOutline, heart,
+  chatbubbleOutline, paperPlaneOutline, bookmarkOutline,
+  peopleOutline, ellipsisHorizontal, closeOutline, musicalNoteOutline
+} from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { Auth } from '../../services/auth';
@@ -20,57 +23,50 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./feed.page.scss'],
   standalone: true,
   imports: [
-    IonInput, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonList, IonItem, IonLabel, IonButton, IonButtons,
-    IonRefresher, IonRefresherContent, IonSpinner,
+    IonHeader, IonToolbar, IonContent,
+    IonButton, IonButtons, IonRefresher, IonRefresherContent, IonSpinner,
     IonInfiniteScroll, IonInfiniteScrollContent,
     FormsModule, CommonModule, IonIcon
   ]
 })
 export class FeedPage implements OnInit {
 
-  posts: any[] = [];
-  stories: any[] = [];
-  storageBase = environment.storageUrl;
-  myUsername  = '';
+  posts: any[]    = [];
+  stories: any[]  = [];
+  storageBase     = environment.storageUrl;
+  myUsername      = '';
 
   selectedPost: any = null;
-  newComment = '';
-  comments: any[] = [];
-  showComments = false;
-  loading = false;
+  newComment  = '';
+  comments: any[]   = [];
+  showComments      = false;
+  loading           = false;
   currentUserId: number | null = null;
 
   currentPage = 1;
   allLoaded   = false;
 
-  constructor(
-    private api: Api,
-    private router: Router,
-    private auth: Auth,
-  ) {
-    addIcons({ cameraOutline, personAdd, peopleOutline, bookOutline, personCircleOutline, exitOutline, heartOutline, heart, chatbubbleOutline });
+  constructor(private api: Api, private router: Router, private auth: Auth) {
+    addIcons({
+      cameraOutline, personOutline, add, heartOutline, heart,
+      chatbubbleOutline, paperPlaneOutline, bookmarkOutline,
+      peopleOutline, ellipsisHorizontal, closeOutline, musicalNoteOutline
+    });
   }
 
   ngOnInit() {
     const user = this.auth.getUser();
     this.currentUserId = user?.id ?? null;
-    this.myUsername = user?.profile?.username ?? user?.username ?? '';
+    this.myUsername    = user?.profile?.username ?? user?.username ?? '';
     this.api.getMe().subscribe({
-      next: me => {
-        this.myUsername = me?.profile?.username ?? '';
-        this.auth.setUser(me);
-      }
+      next: me => { this.myUsername = me?.profile?.username ?? ''; this.auth.setUser(me); }
     });
     this.load();
     this.loadStories();
   }
 
   loadStories() {
-    this.api.getStories().subscribe({
-      next: res => this.stories = res,
-      error: ()  => {}
-    });
+    this.api.getStories().subscribe({ next: res => this.stories = res, error: () => {} });
   }
 
   load(event?: any) {
@@ -84,10 +80,7 @@ export class FeedPage implements OnInit {
         this.loading   = false;
         if (event) event.target.complete();
       },
-      error: () => {
-        this.loading = false;
-        if (event) event.target.complete();
-      }
+      error: () => { this.loading = false; if (event) event.target.complete(); }
     });
   }
 
@@ -124,13 +117,11 @@ export class FeedPage implements OnInit {
     return base + path;
   }
 
-  goNewPost()    { this.router.navigateByUrl('/new-post'); }
-  goFriends()    { this.router.navigateByUrl('/friends'); }
-  goStories()    { this.router.navigateByUrl('/stories'); }
-  goProfile(username: string) { if (username) this.router.navigateByUrl('/profile/' + username); }
-  goMyProfile() {
-    if (this.myUsername) this.router.navigateByUrl('/profile/' + this.myUsername);
-  }
+  goNewPost()    { this.router.navigateByUrl('/tabs/new-post'); }
+  goStories()    { this.router.navigateByUrl('/tabs/stories'); }
+  goMessages()   { this.router.navigateByUrl('/tabs/messages'); }
+  goNotifications() { this.router.navigateByUrl('/tabs/notifications'); }
+  goProfile(username: string) { if (username) this.router.navigateByUrl('/tabs/profile/' + username); }
 
   openComments(post: any) {
     this.selectedPost = post;
@@ -147,19 +138,9 @@ export class FeedPage implements OnInit {
   }
 
   closeComments() {
-    this.showComments = false;
-    this.selectedPost = null;
-    this.comments = [];
-    this.newComment = '';
-  }
-
-  logout() {
-    const navigate = () => this.router.navigateByUrl('/login', { replaceUrl: true });
-    const obs = this.auth.logoutRemote();
-    if (!obs) { navigate(); return; }
-    obs.subscribe({
-      next: () => { this.auth.logout(); navigate(); },
-      error: () => { this.auth.logout(); navigate(); }
-    });
+    this.showComments  = false;
+    this.selectedPost  = null;
+    this.comments      = [];
+    this.newComment    = '';
   }
 }

@@ -1,0 +1,109 @@
+<ion-header class="detail-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()" style="color:#fff;">
+        <ion-icon name="chevron-back-outline" style="font-size:24px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <span slot="start" style="color:#fff;font-size:16px;font-weight:700;margin-left:4px;">Publicación</span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  @if (loading) {
+    <div class="spinner-wrap">
+      <ion-spinner name="crescent" style="color:#fff;"></ion-spinner>
+    </div>
+  }
+
+  @if (!loading && !post) {
+    <div class="empty-state">
+      <p style="color:#8E8E93;">Publicación no encontrada</p>
+    </div>
+  }
+
+  @if (!loading && post) {
+    <div class="post-card">
+      <!-- Header -->
+      <div class="post-header">
+        <div class="post-user" (click)="goProfile(post.user?.profile?.username)">
+          <div class="post-avatar">
+            @if (post.user?.profile?.avatar) {
+              <img [src]="imgUrl(post.user.profile.avatar)" class="avatar-img" />
+            } @else {
+              <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+            }
+          </div>
+          <span class="post-username">{{ post.user?.profile?.username || post.user?.name }}</span>
+        </div>
+        <ion-icon name="ellipsis-horizontal" style="font-size:20px;color:#fff;padding:8px;cursor:pointer;"></ion-icon>
+      </div>
+
+      <!-- Media -->
+      @if (post.image) {
+        <div class="post-media">
+          <img [src]="imgUrl(post.image)" />
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="post-actions">
+        <div class="actions-left">
+          <button class="action-btn">
+            @if (isLikedByMe()) {
+              <ion-icon name="heart" style="font-size:26px;color:#E1306C;"></ion-icon>
+            } @else {
+              <ion-icon name="heart-outline" style="font-size:26px;color:#fff;"></ion-icon>
+            }
+          </button>
+          <button class="action-btn">
+            <ion-icon name="chatbubble-outline" style="font-size:24px;color:#fff;"></ion-icon>
+          </button>
+          <button class="action-btn">
+            <ion-icon name="paper-plane-outline" style="font-size:24px;color:#fff;"></ion-icon>
+          </button>
+        </div>
+        <button class="action-btn">
+          <ion-icon name="bookmark-outline" style="font-size:24px;color:#fff;"></ion-icon>
+        </button>
+      </div>
+
+      @if ((post.likes?.length || 0) > 0) {
+        <div class="post-likes">{{ post.likes.length }} Me gusta</div>
+      }
+
+      @if (post.caption) {
+        <div class="post-caption">
+          <span class="post-caption-user">{{ post.user?.profile?.username || post.user?.name }}</span>
+          &nbsp;{{ post.caption }}
+        </div>
+      }
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section">
+      @for (c of comments; track c.id) {
+        <div class="comment-item">
+          <div class="comment-avatar">
+            <ion-icon name="person-outline" style="font-size:14px;color:#8E8E93;"></ion-icon>
+          </div>
+          <div class="comment-body">
+            <span class="comment-user">{{ c.user?.profile?.username || c.user?.name }}</span>
+            &nbsp;<span class="comment-text">{{ c.content }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Comment input -->
+    <div class="comment-input-row">
+      <div class="comment-input-avatar">
+        <ion-icon name="person-outline" style="font-size:14px;color:#8E8E93;"></ion-icon>
+      </div>
+      <input class="comment-input" [(ngModel)]="newComment" placeholder="Agrega un comentario..." (keyup.enter)="sendComment()" />
+      <button class="comment-send" [disabled]="!newComment.trim()" (click)="sendComment()">Publicar</button>
+    </div>
+  }
+
+</ion-content>

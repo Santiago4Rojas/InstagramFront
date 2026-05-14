@@ -1,0 +1,31 @@
+<ion-content>
+  <div class="menu-wrap">
+    <div class="handle-bar"></div>
+    <h3 class="menu-title">Crear</h3>
+
+    <div class="menu-item" (click)="goReel()">
+      <div class="menu-icon">
+        <ion-icon name="film-outline"></ion-icon>
+      </div>
+      <ion-label>Reel</ion-label>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <div class="menu-item" (click)="goPost()">
+      <div class="menu-icon">
+        <ion-icon name="grid-outline"></ion-icon>
+      </div>
+      <ion-label>Publicación</ion-label>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <div class="menu-item" (click)="openCamera()">
+      <div class="menu-icon">
+        <ion-icon name="camera-outline"></ion-icon>
+      </div>
+      <ion-label>Cámara</ion-label>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,86 @@
+.notif-header ion-toolbar {
+  --background: #000;
+  border-bottom: 0.5px solid #3A3A3C;
+}
+
+ion-content { --background: #000; }
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.section-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  padding: 14px 16px 8px;
+}
+
+.notif-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid #1C1C1E;
+}
+
+.notif-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 44px; height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.notif-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.notif-username {
+  font-weight: 700;
+  color: #fff;
+}
+
+.notif-detail {
+  color: #fff;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.notif-btn {
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.notif-btn--primary { background: #0095F6; border-color: #0095F6; }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px;
+}

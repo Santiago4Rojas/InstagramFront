@@ -1,0 +1,66 @@
+<ion-header class="explore-header">
+  <ion-toolbar>
+    <ion-searchbar
+      class="dark-searchbar"
+      placeholder="Buscar"
+      [debounce]="400"
+      (ionInput)="onSearch($event)"
+      animated="false">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  @if (searchQuery) {
+    <!-- User search results -->
+    @if (searchLoading) {
+      <div class="spinner-wrap">
+        <ion-spinner name="crescent" style="color:#fff;"></ion-spinner>
+      </div>
+    }
+    @if (!searchLoading) {
+      @for (u of users; track u.id) {
+        <div class="user-row" (click)="goProfile(u.profile?.username || u.username)">
+          <div class="user-avatar">
+            @if (u.profile?.avatar) {
+              <img [src]="imgUrl(u.profile.avatar)" class="avatar-img" />
+            } @else {
+              <ion-icon name="person-outline" style="font-size:18px;color:#8E8E93;"></ion-icon>
+            }
+          </div>
+          <div class="user-info">
+            <span class="user-username">{{ u.profile?.username || u.name }}</span>
+            <span class="user-name">{{ u.name }}</span>
+          </div>
+        </div>
+      }
+      @if (users.length === 0) {
+        <div class="empty-state">
+          <p style="color:#8E8E93;">Sin resultados para "{{ searchQuery }}"</p>
+        </div>
+      }
+    }
+  } @else {
+    <!-- Posts grid -->
+    @if (loading) {
+      <div class="spinner-wrap">
+        <ion-spinner name="crescent" style="color:#fff;"></ion-spinner>
+      </div>
+    }
+    <div class="posts-grid">
+      @for (p of posts; track p.id) {
+        <div class="grid-cell" (click)="goProfile(p.user?.profile?.username)">
+          <img [src]="imgUrl(p.image)" loading="lazy" />
+          @if ((p.likes?.length || 0) > 0) {
+            <div class="cell-overlay">
+              <ion-icon name="heart" style="font-size:14px;color:#fff;"></ion-icon>
+              <span style="font-size:12px;font-weight:700;color:#fff;">{{ p.likes.length }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</ion-content>

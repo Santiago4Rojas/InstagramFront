@@ -1,2 +1,57 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+// Design System — Instagram Dark Theme
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+:root {
+  --color-bg:             #000000;
+  --color-surface:        #1C1C1E;
+  --color-border:         #3A3A3C;
+  --color-text-primary:   #FFFFFF;
+  --color-text-secondary: #8E8E93;
+  --color-action:         #0095F6;
+  --color-danger:         #E1306C;
+  --color-btn-secondary:  #1C1C1E;
+  --color-online:         #34C759;
+
+  --story-color-1: #E1306C;
+  --story-color-2: #F77737;
+  --story-color-3: #FCAF45;
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-full: 50%;
+
+  --font-base:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-brand: 'Dancing Script', cursive;
+
+  --tab-bar-height: 56px;
+
+  // Ionic overrides
+  --ion-background-color:             #000000;
+  --ion-background-color-rgb:         0,0,0;
+  --ion-text-color:                   #FFFFFF;
+  --ion-text-color-rgb:               255,255,255;
+  --ion-border-color:                 #3A3A3C;
+  --ion-toolbar-background:           #000000;
+  --ion-tab-bar-background:           #000000;
+  --ion-tab-bar-border-color:         #3A3A3C;
+  --ion-item-background:              #000000;
+  --ion-card-background:              #1C1C1E;
+  --ion-color-primary:                #0095F6;
+  --ion-color-primary-rgb:            0,149,246;
+  --ion-color-primary-contrast:       #FFFFFF;
+  --ion-color-primary-shade:          #0084db;
+  --ion-color-primary-tint:           #1aa0f7;
+  --ion-color-danger:                 #E1306C;
+  --ion-color-danger-rgb:             225,48,108;
+  --ion-color-danger-contrast:        #FFFFFF;
+  --ion-color-medium:                 #8E8E93;
+  --ion-color-medium-rgb:             142,142,147;
+  --ion-color-medium-contrast:        #FFFFFF;
+  --ion-color-light:                  #1C1C1E;
+  --ion-color-light-rgb:              28,28,30;
+  --ion-color-light-contrast:         #FFFFFF;
+  --ion-color-dark:                   #FFFFFF;
+  --ion-color-dark-rgb:               255,255,255;
+  --ion-color-dark-contrast:          #000000;
+}

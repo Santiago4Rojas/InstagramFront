@@ -1,23 +1,19 @@
-<ion-header>
+<ion-header class="feed-header">
   <ion-toolbar>
-    <ion-title>Feed</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="goNewPost()" title="Nueva publicación">
-        <ion-icon name="camera-outline"></ion-icon>
+      <ion-button (click)="goNewPost()">
+        <ion-icon name="camera-outline" style="font-size:26px;color:#fff;"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <div slot="start" style="margin-left:4px;">
+      <span class="brand-font">Instagram</span>
+    </div>
     <ion-buttons slot="end">
-      <ion-button (click)="goMyProfile()" title="Mi perfil">
-        <ion-icon name="person-circle-outline" style="font-size:26px;"></ion-icon>
+      <ion-button (click)="goNotifications()">
+        <ion-icon name="heart-outline" style="font-size:26px;color:#fff;"></ion-icon>
       </ion-button>
-      <ion-button (click)="goStories()" title="Historias">
-        <ion-icon name="book-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="goFriends()" title="Amigos">
-        <ion-icon name="person-add"></ion-icon>
-      </ion-button>
-      <ion-button (click)="logout()" title="Cerrar sesión">
-        <ion-icon name="exit-outline"></ion-icon>
+      <ion-button (click)="goMessages()">
+        <ion-icon name="paper-plane-outline" style="font-size:24px;color:#fff;"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -25,139 +21,153 @@
 
 <ion-content>
 
-  <!-- Pull-to-refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="load($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Historias activas -->
-  @if (stories.length > 0) {
-    <div style="display:flex;gap:14px;padding:12px 16px;overflow-x:auto;border-bottom:1px solid #eee;background:white;">
-      @for (g of stories; track g.user.id) {
-        <div (click)="goStories()"
-          style="display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:60px;">
-          <div style="width:56px;height:56px;border-radius:50%;border:2.5px solid #e1306c;overflow:hidden;background:#eee;">
-            <img [src]="imgUrl(g.stories[0]?.image)"
-              style="width:100%;height:100%;object-fit:cover;" />
-          </div>
-          <span style="font-size:10px;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;">
-            {{ g.user?.profile?.username || g.user?.name }}
-          </span>
-        </div>
-      }
+  <!-- Stories row -->
+  <div class="stories-row">
+    <div class="story-item" (click)="goStories()">
+      <div class="story-avatar-wrap your-story">
+        <ion-icon name="person-outline" style="font-size:22px;color:#8E8E93;"></ion-icon>
+        <div class="add-badge"><ion-icon name="add" style="font-size:10px;color:#fff;"></ion-icon></div>
+      </div>
+      <span class="story-username">Tu historia</span>
     </div>
-  }
+    @for (g of stories; track g.user.id) {
+      <div class="story-item" (click)="goStories()">
+        <div class="story-ring">
+          <div class="story-ring-inner">
+            <img class="story-avatar" [src]="imgUrl(g.stories[0]?.image)" loading="lazy" />
+          </div>
+        </div>
+        <span class="story-username">{{ g.user?.profile?.username || g.user?.name }}</span>
+      </div>
+    }
+  </div>
 
-  <!-- Spinner de carga -->
   @if (loading && posts.length === 0) {
-    <div style="display:flex;justify-content:center;padding:32px;">
+    <div style="display:flex;justify-content:center;padding:48px;">
       <ion-spinner name="crescent"></ion-spinner>
     </div>
   }
 
-  <!-- Sin amigos: mensaje orientativo -->
   @if (!loading && posts.length === 0) {
-    <div style="text-align:center;padding:48px 24px;color:#888;">
-      <ion-icon name="people-outline" style="font-size:48px;margin-bottom:12px;"></ion-icon>
-      <p>Tu feed está vacío.</p>
-      <p>Agrega amigos para ver sus publicaciones.</p>
-      <ion-button (click)="goFriends()" fill="outline">Buscar amigos</ion-button>
+    <div class="empty-state">
+      <ion-icon name="people-outline" style="font-size:52px;color:#3A3A3C;"></ion-icon>
+      <p style="color:#8E8E93;margin-top:12px;">Tu feed está vacío</p>
+      <p style="color:#8E8E93;font-size:14px;">Agrega amigos para ver sus publicaciones</p>
     </div>
   }
 
-  <!-- Lista de posts -->
   @for (p of posts; track p.id) {
-    <ion-list style="margin-bottom:8px;border-bottom:1px solid #eee;">
-      <!-- Cabecera: usuario -->
-      <ion-item lines="none">
-        <ion-label>
-          <h2>
-            <strong style="cursor:pointer;"
-              (click)="goProfile(p.user?.profile?.username)">
-              {{ p.user?.profile?.username || p.user?.name }}
-            </strong>
-          </h2>
-        </ion-label>
-      </ion-item>
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-user" (click)="goProfile(p.user?.profile?.username)">
+          <div class="post-avatar-wrap">
+            @if (p.user?.profile?.avatar) {
+              <img class="post-avatar" [src]="imgUrl(p.user.profile.avatar)" />
+            } @else {
+              <div class="post-avatar-placeholder">
+                <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+              </div>
+            }
+          </div>
+          <div class="post-user-info">
+            <span class="post-username">{{ p.user?.profile?.username || p.user?.name }}</span>
+          </div>
+        </div>
+        <ion-icon name="ellipsis-horizontal" style="font-size:20px;color:#fff;cursor:pointer;padding:8px;"></ion-icon>
+      </div>
 
-      <!-- Imagen del post -->
       @if (p.image) {
-        <div style="width:100%;background:#000;">
-          <img
-            [src]="imgUrl(p.image)"
-            style="width:100%;max-height:420px;object-fit:contain;display:block;"
-            loading="lazy"
-          />
+        <div class="post-media">
+          <img [src]="imgUrl(p.image)" loading="lazy" />
         </div>
       }
 
-      <!-- Acciones: Like y Comentarios -->
-      <ion-item lines="none">
-        <ion-button fill="clear" (click)="toggleLike(p)">
-          @if (isLikedByMe(p)) {
-            <ion-icon name="heart" color="danger"></ion-icon>
-          } @else {
-            <ion-icon name="heart-outline"></ion-icon>
-          }
-          &nbsp;{{ p.likes?.length || 0 }}
-        </ion-button>
-        <ion-button fill="clear" (click)="openComments(p)">
-          <ion-icon name="chatbubble-outline"></ion-icon>
-          &nbsp;{{ p.comments_count || p.comments?.length || 0 }}
-        </ion-button>
-      </ion-item>
+      <div class="post-actions">
+        <div class="actions-left">
+          <button class="action-btn" (click)="toggleLike(p)">
+            @if (isLikedByMe(p)) {
+              <ion-icon name="heart" style="font-size:26px;color:#E1306C;"></ion-icon>
+            } @else {
+              <ion-icon name="heart-outline" style="font-size:26px;color:#fff;"></ion-icon>
+            }
+          </button>
+          <button class="action-btn" (click)="openComments(p)">
+            <ion-icon name="chatbubble-outline" style="font-size:24px;color:#fff;"></ion-icon>
+          </button>
+          <button class="action-btn">
+            <ion-icon name="paper-plane-outline" style="font-size:24px;color:#fff;"></ion-icon>
+          </button>
+        </div>
+        <button class="action-btn">
+          <ion-icon name="bookmark-outline" style="font-size:24px;color:#fff;"></ion-icon>
+        </button>
+      </div>
 
-      <!-- Caption -->
-      @if (p.caption) {
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            <span><strong>{{ p.user?.profile?.username || p.user?.name }}</strong>&nbsp;{{ p.caption }}</span>
-          </ion-label>
-        </ion-item>
+      @if ((p.likes?.length || 0) > 0) {
+        <div class="post-likes">{{ p.likes?.length || 0 }} Me gusta</div>
       }
-    </ion-list>
+
+      @if (p.caption) {
+        <div class="post-caption">
+          <span class="post-caption-user">{{ p.user?.profile?.username || p.user?.name }}</span>
+          &nbsp;{{ p.caption }}
+        </div>
+      }
+
+      @if ((p.comments_count || p.comments?.length || 0) > 0) {
+        <div class="post-comments-link" (click)="openComments(p)">
+          Ver los {{ p.comments_count || p.comments?.length }} comentarios
+        </div>
+      }
+    </div>
   }
 
-  <!-- Infinite scroll -->
   <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="allLoaded">
     <ion-infinite-scroll-content loadingText="Cargando más..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <!-- Panel de comentarios -->
-  @if (showComments) {
-    <div style="position:fixed;bottom:0;left:0;right:0;top:30%;background:white;z-index:1000;box-shadow:0 -4px 16px rgba(0,0,0,.2);display:flex;flex-direction:column;">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Comentarios</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeComments()">Cerrar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
-      <div style="flex:1;overflow-y:auto;padding:8px 0;">
-        <ion-list>
-          @for (c of comments; track c.id) {
-            <ion-item lines="none">
-              <ion-label class="ion-text-wrap">
-                <strong>{{ c.user?.profile?.username || c.user?.name }}</strong>
-                &nbsp;{{ c.content }}
-              </ion-label>
-            </ion-item>
-          }
-          @if (comments.length === 0) {
-            <ion-item lines="none">
-              <ion-label color="medium">Sin comentarios aún.</ion-label>
-            </ion-item>
-          }
-        </ion-list>
-      </div>
-
-      <ion-item>
-        <ion-input placeholder="Escribe un comentario..." [(ngModel)]="newComment"></ion-input>
-        <ion-button slot="end" (click)="sendComment()">Enviar</ion-button>
-      </ion-item>
-    </div>
-  }
-
 </ion-content>
+
+@if (showComments) {
+  <div class="comments-overlay" (click)="closeComments()"></div>
+  <div class="comments-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <span>Comentarios</span>
+      <ion-icon name="close-outline" (click)="closeComments()"></ion-icon>
+    </div>
+    <div class="sheet-comments">
+      @for (c of comments; track c.id) {
+        <div class="comment-item">
+          <div class="comment-avatar">
+            <ion-icon name="person-outline" style="font-size:14px;color:#8E8E93;"></ion-icon>
+          </div>
+          <div class="comment-body">
+            <span class="comment-user">{{ c.user?.profile?.username || c.user?.name }}</span>
+            &nbsp;<span class="comment-text">{{ c.content }}</span>
+          </div>
+          <ion-icon name="heart-outline" style="font-size:14px;color:#8E8E93;margin-left:auto;flex-shrink:0;"></ion-icon>
+        </div>
+      }
+      @if (comments.length === 0) {
+        <p style="text-align:center;color:#8E8E93;padding:24px 0;">Sin comentarios aún.</p>
+      }
+    </div>
+    <div class="emoji-row">
+      @for (e of ['❤️','🙌','🔥','👏','😢','😍','😮','😂']; track e) {
+        <span class="emoji-btn" (click)="newComment = newComment + e">{{ e }}</span>
+      }
+    </div>
+    <div class="comment-input-row">
+      <div class="comment-input-avatar">
+        <ion-icon name="person-outline" style="font-size:14px;color:#8E8E93;"></ion-icon>
+      </div>
+      <input class="comment-input" placeholder="Agrega un comentario..." [(ngModel)]="newComment" (keyup.enter)="sendComment()" />
+      <button class="comment-send" [disabled]="!newComment.trim()" (click)="sendComment()">Publicar</button>
+    </div>
+  </div>
+}

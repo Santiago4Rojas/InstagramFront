@@ -1,5 +1,5 @@
 ion-content {
-  --background: #fafafa;
+  --background: #000000;
 }
 
 .register-wrap {
@@ -8,7 +8,7 @@ ion-content {
   align-items: center;
   min-height: 100vh;
   padding: 0 40px;
-  background: #fafafa;
+  background: #000000;
 }
 
 // ── Logo ────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ ion-content {
   font-family: 'Dancing Script', cursive !important;
   font-size: 56px;
   font-weight: 700;
-  color: #262626;
+  color: #ffffff;
   letter-spacing: -1px;
   line-height: 1;
 }
@@ -36,7 +36,7 @@ ion-content {
 }
 
 .headline {
-  color: #8e8e8e;
+  color: #8E8E93;
   font-size: 17px;
   font-weight: 600;
   text-align: center;
@@ -56,10 +56,10 @@ ion-content {
 
 .light-input {
   width: 100%;
-  background: #fff;
-  border: 1px solid #dbdbdb;
+  background: #1C1C1E;
+  border: 1px solid #3A3A3C;
   border-radius: 6px;
-  color: #262626;
+  color: #ffffff;
   font-size: 14px;
   padding: 13px 16px;
   outline: none;
@@ -67,11 +67,11 @@ ion-content {
   transition: border-color 0.15s;
 }
 .light-input::placeholder {
-  color: #8e8e8e;
+  color: #8E8E93;
   font-size: 13px;
 }
 .light-input:focus {
-  border-color: #a8a8a8;
+  border-color: #8E8E93;
 }
 
 .password-wrap .light-input {
@@ -85,7 +85,7 @@ ion-content {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #262626;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -94,7 +94,7 @@ ion-content {
 }
 
 .error-msg {
-  color: #ed4956;
+  color: #E1306C;
   font-size: 12px;
   text-align: center;
   margin: 2px 0 10px;
@@ -102,8 +102,8 @@ ion-content {
 
 .submit-btn {
   width: 100%;
-  background: #0095f6;
-  color: #fff;
+  background: #0095F6;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -118,15 +118,15 @@ ion-content {
   transition: background 0.15s;
 }
 .submit-btn--disabled {
-  background: #b2dffc;
+  background: rgba(0, 149, 246, 0.4);
   cursor: default;
 }
 .submit-btn:not(.submit-btn--disabled):active {
-  background: #0084db;
+  opacity: 0.85;
 }
 
 .terms {
-  color: #8e8e8e;
+  color: #8E8E93;
   font-size: 12px;
   text-align: center;
   line-height: 1.5;
@@ -134,7 +134,7 @@ ion-content {
 }
 
 .terms-link {
-  color: #262626;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
 }
@@ -154,19 +154,19 @@ ion-content {
 
 .login-divider {
   height: 1px;
-  background: #dbdbdb;
+  background: #3A3A3C;
   margin-bottom: 18px;
 }
 
 .login-row {
   text-align: center;
   font-size: 14px;
-  color: #262626;
+  color: #ffffff;
   margin: 0 0 24px;
 }
 
 .login-link {
-  color: #0095f6;
+  color: #0095F6;
   font-weight: 700;
   cursor: pointer;
   margin-left: 4px;
@@ -181,12 +181,12 @@ ion-content {
 }
 
 .meta-from {
-  color: #8e8e8e;
+  color: #8E8E93;
   font-size: 12px;
 }
 
 .meta-brand {
-  color: #8e8e8e;
+  color: #8E8E93;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.3px;
@@ -196,8 +196,8 @@ ion-content {
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 0.75s linear infinite;
 }

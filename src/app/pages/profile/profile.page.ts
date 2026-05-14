@@ -9,7 +9,8 @@ import { addIcons } from 'ionicons';
 import {
   gridOutline, lockClosedOutline, personAddOutline, add,
   checkmarkCircleOutline, createOutline, linkOutline,
-  cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble
+  cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble,
+  logOutOutline
 } from 'ionicons/icons';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Api } from '../../services/api';
@@ -62,7 +63,8 @@ export class ProfilePage implements OnInit {
   ) {
     addIcons({ gridOutline, lockClosedOutline, personAddOutline, add,
                checkmarkCircleOutline, createOutline, linkOutline,
-               cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble });
+               cameraOutline, imagesOutline, heartOutline, heart, chatbubbleOutline, chatbubble,
+               logOutOutline });
   }
 
   ngOnInit() {
@@ -185,6 +187,11 @@ export class ProfilePage implements OnInit {
       this.comments.unshift(res);
       this.newComment = '';
     });
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
   goToProfile(username: string) {

@@ -29,7 +29,7 @@
           [(ngModel)]="password"
         />
         <button class="show-hide-btn" type="button" (click)="showPassword = !showPassword">
-          {{ showPassword ? 'Hide' : 'Show' }}
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="eye-icon"></ion-icon>
         </button>
       </div>
 

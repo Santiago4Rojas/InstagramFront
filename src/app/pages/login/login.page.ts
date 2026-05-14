@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 
@@ -10,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, FormsModule, CommonModule]
+  imports: [IonContent, IonIcon, FormsModule, CommonModule]
 })
 export class LoginPage implements OnInit {
 
@@ -20,7 +22,9 @@ export class LoginPage implements OnInit {
   error        = '';
   loading      = false;
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router) {
+    addIcons({ eyeOutline, eyeOffOutline });
+  }
 
   // Fires on first load
   ngOnInit() { this.resetFields(); }

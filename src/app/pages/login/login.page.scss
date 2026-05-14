@@ -7,154 +7,159 @@ ion-content {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 0 40px;
+  padding: 0 24px;
   background: #000000;
 }
 
-// ── Logo ────────────────────────────────────────────────────
+// ── Logo ─────────────────────────────────────────────────────
 .logo-area {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 72px;
-  margin-bottom: 32px;
+  padding-top: max(18vh, 64px);
+  margin-bottom: 36px;
 }
 
 .brand-font {
   font-family: 'Dancing Script', cursive !important;
-  font-size: 56px;
+  font-size: 58px;
   font-weight: 700;
   color: #ffffff;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   line-height: 1;
 }
 
-// ── Form ────────────────────────────────────────────────────
+// ── Form ─────────────────────────────────────────────────────
 .form-area {
   width: 100%;
 }
 
 .input-wrap {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   position: relative;
 }
 
+// Pill input — mismo en ambos campos
 .light-input {
   width: 100%;
   background: #1C1C1E;
-  border: 1px solid #3A3A3C;
-  border-radius: 6px;
+  border: 1.5px solid #3A3A3C;
+  border-radius: 50px;
   color: #ffffff;
   font-size: 14px;
-  padding: 13px 16px;
+  padding: 14px 20px;
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s;
 }
 .light-input::placeholder {
   color: #8E8E93;
-  font-size: 13px;
 }
 .light-input:focus {
-  border-color: #8E8E93;
+  border-color: #0095F6;
 }
 
+// Dejar espacio para el ícono del ojo
 .password-wrap .light-input {
-  padding-right: 64px;
+  padding-right: 52px;
 }
 
 .show-hide-btn {
   position: absolute;
-  right: 14px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
+  color: #8E8E93;
   cursor: pointer;
   padding: 0;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye-icon {
+  font-size: 20px;
 }
 
 .error-msg {
   color: #E1306C;
   font-size: 12px;
   text-align: center;
-  margin: 2px 0 10px;
+  margin: 0 0 10px;
 }
 
+// Pill button principal
 .submit-btn {
   width: 100%;
   background: #0095F6;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 15px;
-  font-weight: 600;
-  padding: 11px;
+  font-weight: 700;
+  padding: 14px;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  transition: background 0.15s;
+  min-height: 46px;
+  transition: opacity 0.15s;
+  letter-spacing: 0.2px;
 }
 .submit-btn--disabled {
-  background: rgba(0, 149, 246, 0.4);
+  opacity: 0.4;
   cursor: default;
 }
 .submit-btn:not(.submit-btn--disabled):active {
   opacity: 0.85;
 }
 
+// "Forgot password?"
 .forgot-wrap {
   text-align: center;
   margin-top: 18px;
 }
-
 .forgot-link {
-  color: #0095F6;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
 }
 
-// ── OR divider ──────────────────────────────────────────────
+// ── OR divider ────────────────────────────────────────────────
 .divider {
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 22px 0 0;
-  gap: 16px;
+  margin: 28px 0 0;
+  gap: 14px;
 }
-
 .divider-line {
   flex: 1;
   height: 1px;
   background: #3A3A3C;
 }
-
 .divider-text {
   color: #8E8E93;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
-// ── Spacer ──────────────────────────────────────────────────
+// ── Spacer ────────────────────────────────────────────────────
 .spacer {
   flex: 1;
-  min-height: 40px;
+  min-height: 28px;
 }
 
-// ── Bottom section ──────────────────────────────────────────
+// ── Footer ────────────────────────────────────────────────────
 .create-section {
-  width: calc(100% + 80px);
-  margin-left: -40px;
-  margin-right: -40px;
+  width: calc(100% + 48px);
+  margin-left: -24px;
+  margin-right: -24px;
 }
 
 .create-divider {
@@ -163,17 +168,18 @@ ion-content {
   margin-bottom: 20px;
 }
 
+// Pill button secundario
 .create-btn {
   display: block;
-  width: calc(100% - 80px);
-  margin: 0 auto 28px;
+  width: calc(100% - 48px);
+  margin: 0 auto 24px;
   background: transparent;
   border: 1.5px solid #0095F6;
-  border-radius: 8px;
+  border-radius: 50px;
   color: #0095F6;
   font-size: 14px;
   font-weight: 700;
-  padding: 10px;
+  padding: 12px;
   cursor: pointer;
   text-align: center;
   transition: opacity 0.15s;
@@ -189,20 +195,18 @@ ion-content {
   gap: 5px;
   padding-bottom: max(env(safe-area-inset-bottom), 24px);
 }
-
 .meta-from {
   color: #8E8E93;
   font-size: 12px;
 }
-
 .meta-brand {
-  color: #8E8E93;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
-// ── Loading spinner ─────────────────────────────────────────
+// ── Spinner de carga ─────────────────────────────────────────
 .spinner {
   width: 18px;
   height: 18px;

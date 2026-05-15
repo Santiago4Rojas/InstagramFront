@@ -105,7 +105,8 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   isMine(msg: any): boolean {
-    return msg.sender_id === this.myId;
+    // sender_id can come as number or string depending on DB driver
+    return Number(msg.sender_id) === this.myId;
   }
 
   formatTime(dateStr: string): string {

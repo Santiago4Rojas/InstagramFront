@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonContent, IonButtons, IonButton, IonIcon,
-  IonFooter, IonSpinner
+  IonFooter, IonSpinner, ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -24,7 +24,8 @@ import { environment } from '../../../environments/environment';
     CommonModule, FormsModule,
     IonHeader, IonToolbar, IonContent, IonButtons, IonButton, IonIcon,
     IonFooter, IonSpinner
-  ]
+  ],
+  providers: [ToastController]
 })
 export class ChatPage implements OnInit, OnDestroy {
   @ViewChild(IonContent) content!: IonContent;
@@ -45,7 +46,8 @@ export class ChatPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private auth: Auth,
-    private api: Api
+    private api: Api,
+    private toast: ToastController
   ) {
     addIcons({
       chevronBackOutline, callOutline, videocamOutline, personOutline,
@@ -128,6 +130,26 @@ export class ChatPage implements OnInit, OnDestroy {
 
   private scrollBottom() {
     setTimeout(() => this.content?.scrollToBottom(200), 100);
+  }
+
+  async startCall() {
+    const t = await this.toast.create({
+      message: `Llamando a ${this.friendName}... (función próximamente)`,
+      duration: 2500,
+      position: 'top',
+      color: 'dark'
+    });
+    t.present();
+  }
+
+  async startVideo() {
+    const t = await this.toast.create({
+      message: `Videollamada con ${this.friendName}... (función próximamente)`,
+      duration: 2500,
+      position: 'top',
+      color: 'dark'
+    });
+    t.present();
   }
 
   goBack() { this.router.navigateByUrl('/tabs/messages'); }

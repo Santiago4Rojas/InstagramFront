@@ -6,7 +6,11 @@
       </ion-button>
       <div class="chat-header-user">
         <div class="chat-header-avatar">
-          <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+          @if (friendAvatar) {
+            <img [src]="friendAvatar" class="header-avatar-img" />
+          } @else {
+            <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
+          }
         </div>
         <div class="chat-header-info">
           <span class="chat-header-name">{{ friendName }}</span>
@@ -26,19 +30,29 @@
 </ion-header>
 
 <ion-content>
+  @if (loading) {
+    <div class="spinner-wrap">
+      <ion-spinner name="crescent" style="color:#fff;"></ion-spinner>
+    </div>
+  }
+
   <div class="messages-list">
     @for (m of messages; track m.id) {
-      <div class="msg-row" [class.mine]="m.mine">
-        <div class="bubble" [class.bubble-mine]="m.mine">
-          <span>{{ m.text }}</span>
+      <div class="msg-row" [class.mine]="isMine(m)">
+        <div class="bubble" [class.bubble-mine]="isMine(m)">
+          <span>{{ m.body }}</span>
         </div>
-        <span class="msg-time">{{ m.time }}</span>
+        <span class="msg-time">{{ formatTime(m.created_at) }}</span>
       </div>
     }
-    @if (messages.length === 0) {
+    @if (!loading && messages.length === 0) {
       <div class="empty-chat">
         <div class="empty-avatar">
-          <ion-icon name="person-outline" style="font-size:32px;color:#8E8E93;"></ion-icon>
+          @if (friendAvatar) {
+            <img [src]="friendAvatar" class="empty-avatar-img" />
+          } @else {
+            <ion-icon name="person-outline" style="font-size:32px;color:#8E8E93;"></ion-icon>
+          }
         </div>
         <p style="color:#fff;font-weight:700;margin-bottom:4px;">{{ friendName }}</p>
         <p style="color:#8E8E93;font-size:13px;">Empieza una conversación</p>
@@ -53,13 +67,21 @@
       <ion-icon name="camera-outline" style="font-size:24px;color:#fff;"></ion-icon>
     </button>
     <div class="input-wrap">
-      <input class="chat-input" [(ngModel)]="newMessage" placeholder="Mensaje..." (keyup.enter)="send()" />
+      <input
+        class="chat-input"
+        [(ngModel)]="newMessage"
+        placeholder="Mensaje..."
+        (keyup.enter)="send()"
+      />
       <button class="input-icon-btn" style="padding:0 4px;">
         <ion-icon name="happy-outline" style="font-size:22px;color:#8E8E93;"></ion-icon>
       </button>
     </div>
     @if (newMessage.trim()) {
-      <button class="send-btn" (click)="send()">Enviar</button>
+      <button class="send-btn" (click)="send()" [disabled]="sending">
+        @if (sending) { <ion-spinner name="crescent" style="width:16px;height:16px;color:#0095F6;"></ion-spinner> }
+        @else { Enviar }
+      </button>
     } @else {
       <button class="input-icon-btn">
         <ion-icon name="mic-outline" style="font-size:24px;color:#fff;"></ion-icon>

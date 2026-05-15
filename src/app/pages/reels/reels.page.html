@@ -18,8 +18,8 @@
       <div class="reel-item">
         <!-- Background media -->
         <div class="reel-bg">
-          @if (r.image) {
-            <img [src]="imgUrl(r.image)" class="reel-img" />
+          @if (r.image_data || r.image) {
+            <img [src]="r.image_data || imgUrl(r.image)" class="reel-img" />
           } @else {
             <div class="reel-placeholder">
               <ion-icon name="film-outline" style="font-size:48px;color:#3A3A3C;"></ion-icon>
@@ -32,7 +32,7 @@
           <div class="reel-avatar" (click)="goProfile(r.user?.profile?.username)">
             <ion-icon name="person-circle-outline" style="font-size:36px;color:#fff;"></ion-icon>
           </div>
-          <div class="reel-action-item">
+          <div class="reel-action-item" (click)="toggleLike(r)" style="cursor:pointer;">
             @if (isLikedByMe(r)) {
               <ion-icon name="heart" style="font-size:28px;color:#E1306C;"></ion-icon>
             } @else {

@@ -107,4 +107,35 @@ export class Api {
     return this.http.post(this.apiUrl + 'users/username/' + username + '/friend', {}, this.authHeaders());
   }
 
+  getUserById(id: number) {
+    return this.http.get<any>(this.apiUrl + `users/${id}`, this.authHeaders());
+  }
+
+  getConversations() {
+    return this.http.get<any[]>(this.apiUrl + 'conversations', this.authHeaders());
+  }
+
+  getMessages(userId: number) {
+    return this.http.get<any>(this.apiUrl + `messages/${userId}`, this.authHeaders());
+  }
+
+  sendMessage(userId: number, body: string) {
+    return this.http.post<any>(this.apiUrl + `messages/${userId}`, { body }, this.authHeaders());
+  }
+
+  getNotifications() {
+    return this.http.get<any[]>(this.apiUrl + 'notifications', this.authHeaders());
+  }
+
+  getExplorePosts(page = 1) {
+    return this.http.get<any>(this.apiUrl + `posts/explore?page=${page}`, this.authHeaders());
+  }
+
+  updatePost(postId: number, file: File | null, caption: string) {
+    const fd = new FormData();
+    if (file) fd.append('image', file);
+    fd.append('caption', caption);
+    return this.http.post<any>(this.apiUrl + `posts/${postId}`, fd, this.authHeaders());
+  }
+
 }

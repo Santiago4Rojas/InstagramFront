@@ -12,57 +12,46 @@
     </div>
   }
 
-  @if (!loading) {
+  @if (!loading && notifications.length === 0) {
+    <div class="empty-state">
+      <ion-icon name="person-add-outline" style="font-size:52px;color:#3A3A3C;"></ion-icon>
+      <p style="color:#8E8E93;margin-top:12px;">Sin notificaciones por ahora</p>
+    </div>
+  }
 
-    @if (friendRequests.length > 0) {
-      <div class="section-header">Solicitudes de amistad</div>
-      @for (req of friendRequests; track req.id) {
-        <div class="notif-row">
-          <div class="notif-avatar" (click)="goProfile(req.sender?.profile?.username)">
-            @if (req.sender?.profile?.avatar) {
-              <img [src]="imgUrl(req.sender.profile.avatar)" class="avatar-img" />
-            } @else {
-              <ion-icon name="person-outline" style="font-size:18px;color:#8E8E93;"></ion-icon>
-            }
-          </div>
-          <div class="notif-text" (click)="goProfile(req.sender?.profile?.username)">
-            <span class="notif-username">{{ req.sender?.profile?.username || req.sender?.name }}</span>
-            <span class="notif-detail"> quiere ser tu amigo.</span>
-          </div>
-          <div class="notif-actions">
-            <button class="notif-btn notif-btn--primary" (click)="accept(req)">Confirmar</button>
-            <button class="notif-btn">Eliminar</button>
-          </div>
+  @if (!loading && notifications.length > 0) {
+    @for (n of notifications; track $index) {
+      <div class="notif-row">
+
+        <!-- Avatar -->
+        <div class="notif-avatar" (click)="goProfile(n.user?.username)">
+          @if (n.user?.avatar_data || n.user?.avatar) {
+            <img [src]="n.user?.avatar_data || imgUrl(n.user?.avatar)" class="avatar-img" />
+          } @else {
+            <ion-icon name="person-outline" style="font-size:18px;color:#8E8E93;"></ion-icon>
+          }
         </div>
-      }
-    }
 
-    <!-- This week placeholder -->
-    <div class="section-header">Esta semana</div>
-    <div class="notif-row">
-      <div class="notif-avatar">
-        <ion-icon name="heart-outline" style="font-size:20px;color:#E1306C;"></ion-icon>
-      </div>
-      <div class="notif-text">
-        <span class="notif-detail" style="color:#8E8E93;">Aquí aparecerán los me gusta en tus publicaciones.</span>
-      </div>
-    </div>
-    <div class="notif-row">
-      <div class="notif-avatar">
-        <ion-icon name="chatbubble-outline" style="font-size:20px;color:#0095F6;"></ion-icon>
-      </div>
-      <div class="notif-text">
-        <span class="notif-detail" style="color:#8E8E93;">Aquí aparecerán los comentarios en tus publicaciones.</span>
-      </div>
-    </div>
+        <!-- Text -->
+        <div class="notif-text" (click)="goProfile(n.user?.username)">
+          <span class="notif-username">{{ n.user?.username || n.user?.name }}</span>
+          <span class="notif-detail"> {{ textFor(n) }}</span>
+          <span class="notif-time"> {{ timeAgo(n.created_at) }}</span>
+        </div>
 
-    @if (friendRequests.length === 0) {
-      <div class="empty-state">
-        <ion-icon name="person-add-outline" style="font-size:52px;color:#3A3A3C;"></ion-icon>
-        <p style="color:#8E8E93;margin-top:12px;">Sin notificaciones por ahora</p>
+        <!-- Right side: post thumbnail or action buttons -->
+        @if (n.type === 'friend_request') {
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn--primary" (click)="accept(n)">Confirmar</button>
+          </div>
+        } @else if (n.post_image) {
+          <div class="notif-thumb" (click)="goPost(n.post_id)">
+            <img [src]="n.post_image?.startsWith('data:') ? n.post_image : imgUrl(n.post_image)" class="thumb-img" />
+          </div>
+        }
+
       </div>
     }
-
   }
 
 </ion-content>

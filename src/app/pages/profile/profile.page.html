@@ -43,8 +43,8 @@
                 </div>
               } @else if (avatarPreview) {
                 <img class="profile-avatar" [src]="avatarPreview" />
-              } @else if (data.profile?.avatar) {
-                <img class="profile-avatar" [src]="mediaUrl(data.profile.avatar)" />
+              } @else if (data.profile?.avatar_data || data.profile?.avatar) {
+                <img class="profile-avatar" [src]="data.profile?.avatar_data || mediaUrl(data.profile.avatar)" />
               } @else {
                 <div class="avatar-placeholder">
                   <ion-icon name="person-outline" style="font-size:32px;color:#8E8E93;"></ion-icon>
@@ -97,19 +97,19 @@
         }
         @if (friendshipStatus === 'none') {
           <button class="profile-btn profile-btn--primary" (click)="sendRequest()">Seguir</button>
-          <button class="profile-btn">Mensaje</button>
+          <button class="profile-btn" (click)="goToChat()">Mensaje</button>
         }
         @if (friendshipStatus === 'pending_sent') {
           <button class="profile-btn" disabled>Solicitado</button>
-          <button class="profile-btn">Mensaje</button>
+          <button class="profile-btn" (click)="goToChat()">Mensaje</button>
         }
         @if (friendshipStatus === 'pending_received') {
           <button class="profile-btn profile-btn--primary" (click)="acceptRequest()">Confirmar</button>
-          <button class="profile-btn">Eliminar</button>
+          <button class="profile-btn" (click)="goToChat()">Mensaje</button>
         }
         @if (friendshipStatus === 'friends') {
           <button class="profile-btn" disabled>Siguiendo</button>
-          <button class="profile-btn">Mensaje</button>
+          <button class="profile-btn" (click)="goToChat()">Mensaje</button>
         }
       </div>
 
@@ -144,7 +144,7 @@
       <div class="posts-grid">
         @for (p of data.posts; track p.id) {
           <div class="grid-cell" (click)="openPost(p)">
-            <img [src]="mediaUrl(p.image)" loading="lazy" />
+            <img [src]="p.image_data || mediaUrl(p.image)" loading="lazy" />
             @if ((p.likes?.length || 0) > 0 || (p.comments?.length || 0) > 0) {
               <div class="grid-overlay">
                 @if ((p.likes?.length || 0) > 0) {

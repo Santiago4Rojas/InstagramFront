@@ -38,7 +38,7 @@
       <div class="story-item" (click)="goStories()">
         <div class="story-ring">
           <div class="story-ring-inner">
-            <img class="story-avatar" [src]="imgUrl(g.stories[0]?.image)" loading="lazy" />
+            <img class="story-avatar" [src]="g.stories[0]?.image_data || imgUrl(g.stories[0]?.image)" loading="lazy" />
           </div>
         </div>
         <span class="story-username">{{ g.user?.profile?.username || g.user?.name }}</span>
@@ -65,8 +65,8 @@
       <div class="post-header">
         <div class="post-user" (click)="goProfile(p.user?.profile?.username)">
           <div class="post-avatar-wrap">
-            @if (p.user?.profile?.avatar) {
-              <img class="post-avatar" [src]="imgUrl(p.user.profile.avatar)" />
+            @if (p.user?.profile?.avatar_data || p.user?.profile?.avatar) {
+              <img class="post-avatar" [src]="p.user.profile.avatar_data || imgUrl(p.user.profile.avatar)" />
             } @else {
               <div class="post-avatar-placeholder">
                 <ion-icon name="person-outline" style="font-size:16px;color:#8E8E93;"></ion-icon>
@@ -80,9 +80,9 @@
         <ion-icon name="ellipsis-horizontal" style="font-size:20px;color:#fff;cursor:pointer;padding:8px;"></ion-icon>
       </div>
 
-      @if (p.image) {
+      @if (p.image_data || p.image) {
         <div class="post-media">
-          <img [src]="imgUrl(p.image)" loading="lazy" />
+          <img [src]="p.image_data || imgUrl(p.image)" loading="lazy" />
         </div>
       }
 

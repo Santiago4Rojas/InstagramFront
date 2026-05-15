@@ -51,5 +51,18 @@ export class ReelsPage implements OnInit {
     return reel.likes.some((l: any) => l.user_id === this.currentUserId);
   }
 
+  toggleLike(reel: any) {
+    if (this.isLikedByMe(reel)) {
+      this.api.unlikePost(reel.id).subscribe(() => {
+        reel.likes = reel.likes.filter((l: any) => l.user_id !== this.currentUserId);
+      });
+    } else {
+      this.api.likePost(reel.id).subscribe(() => {
+        if (!reel.likes) reel.likes = [];
+        reel.likes.push({ user_id: this.currentUserId });
+      });
+    }
+  }
+
   goProfile(username: string) { if (username) this.router.navigateByUrl('/tabs/profile/' + username); }
 }

@@ -197,4 +197,9 @@ export class ProfilePage implements OnInit {
   goToProfile(username: string) {
     if (username) this.router.navigateByUrl('/tabs/profile/' + username);
   }
+
+  goToChat() {
+    const userId = this.data?.profile?.user_id ?? this.data?.user_id;
+    if (userId) this.router.navigateByUrl('/tabs/messages/' + userId);
+  }
 }
